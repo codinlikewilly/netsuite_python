@@ -40,7 +40,7 @@ class Netsuite:
             raise Exception("Missing Client Id")
         if not self.api_settings.NETSUITE_APP_NAME:
             raise Exception("Missing Netsuite App Name")
-        if not self.api_settings.CERT_FILE:
+        if not self.api_settings.NETSUITE_KEY_FILE:
             raise Exception("Missing Netsuite Certificate path.")
         if not self.api_settings.CERT_ID:
             raise Exception("Missing Netsuite Certificate ID.")
@@ -82,7 +82,6 @@ class Netsuite:
         private_key = ""
         with open(self.netsuite_key_path, "rb") as pemfile:
             private_key = pemfile.read()
-
         payload = {
             "iss": f"{self.api_settings.CLIENT_ID}",
             "scope": "rest_webservices",
@@ -96,14 +95,13 @@ class Netsuite:
             "alg": "RS256",
             "kid": f"{self.netsuite_cert_id}"
         }
-
         jwt_token = jwt.encode(payload=payload, key=private_key, algorithm='RS256', headers=headers)
 
         return jwt_token
 
     def request_access_token(self):
         json_web_token = self.get_jwt()
-
+        print(json_web_token)
         data = {
             'grant_type': 'client_credentials',
             'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
@@ -117,7 +115,6 @@ class Netsuite:
         url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token"
         response = requests.post(url, data=data, headers=headers)
         token = NetsuiteToken(**response.json())
-        print(response.json())
         self.save_token(token)
         return self.token
 
