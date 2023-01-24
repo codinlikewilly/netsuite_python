@@ -4,8 +4,8 @@ import os
 import click as click
 from click import prompt
 
-from netsuite_python.netsuite.Netsuite import Netsuite
-from netsuite_python.netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
+from netsuite.Netsuite import Netsuite
+from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
 

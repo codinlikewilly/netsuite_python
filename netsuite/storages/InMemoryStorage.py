@@ -1,5 +1,5 @@
-from netsuite_python.netsuite.NetsuiteToken import NetsuiteToken
-from netsuite_python.netsuite.storages import BaseStorage
+from netsuite.NetsuiteToken import NetsuiteToken
+from netsuite.storages import BaseStorage
 
 
 class InMemoryStorage(BaseStorage):

@@ -1,4 +1,4 @@
-from netsuite_python.netsuite.Netsuite import NetsuiteToken
+from netsuite.Netsuite import NetsuiteToken
 
 
 class BaseStorage:

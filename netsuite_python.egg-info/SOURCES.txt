@@ -71,9 +71,9 @@ netsuite/swagger_client/models/one_ofcustomer_custentity_sol_course_attended.py
 netsuite/swagger_client/models/one_ofcustomer_custentity_unvent_hot_water_g3.py
 netsuite/swagger_client/models/one_ofcustomer_custentity_water_regulations1999.py
 netsuite/swagger_client/models/one_ofcustomer_item_pricing_element_item.py
-netsuite_python.egg-info/PKG-INFO
-netsuite_python.egg-info/SOURCES.txt
-netsuite_python.egg-info/dependency_links.txt
-netsuite_python.egg-info/entry_points.txt
-netsuite_python.egg-info/requires.txt
-netsuite_python.egg-info/top_level.txt
+egg-info/PKG-INFO
+egg-info/SOURCES.txt
+egg-info/dependency_links.txt
+egg-info/entry_points.txt
+egg-info/requires.txt
+egg-info/top_level.txt
