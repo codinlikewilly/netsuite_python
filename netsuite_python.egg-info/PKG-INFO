@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: netsuite-python
-Version: 1.0.1
+Version: 1.0.4
 Summary: Python SDK for Netsuite API with Django Integration
 Home-page: https://bitbucket.org/theapiguys/netsuite_python
 Author: Will @ TheAPIGuys

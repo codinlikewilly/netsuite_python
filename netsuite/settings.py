@@ -40,9 +40,12 @@ DEFAULTS = {
     ],
 
     # API Configuration
+    'NETSUITE_APP_NAME': None,
     'CLIENT_ID': None,
-    'CLIENT_SECRET': None,
-    'REDIRECT_URL': 'https://theapiguys.com',
+    'NETSUITE_KEY_FILE': './netsuite-key.pem',
+    'CERT_ID': None,
+    # 'CLIENT_SECRET': None,
+    # 'REDIRECT_URL': 'https://theapiguys.com',
 
     'ALLOW_NONE': False,
     'USE_DATETIME': True,
@@ -50,6 +53,7 @@ DEFAULTS = {
     'STORAGE_CLASS': 'netsuite.storages.JSONStorage',
     'CREDENTIALS_PATH': './netsuite-credentials.json',
     'JSON_STORAGE_PATH': './netsuite-tokens.json',
+    'NETSUITE_CERTIFICATE_PATH': './netsuite-certificate.pem',
 
     'APP_NAME': 'default',
 }

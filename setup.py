@@ -5,7 +5,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='netsuite_python',
-    version='1.0.1',
+    version='1.0.4',
     description='Python SDK for Netsuite API with Django Integration',
     long_description=long_description,
     url='https://bitbucket.org/theapiguys/netsuite_python',
@@ -21,7 +21,8 @@ setup(
         "urllib3 >= 1.15",
         "six >= 1.10",
         "certifi",
-        "python-dateutil"
+        "python-dateutil",
+        "pyOpenSSL"
     ],
     entry_points={
         'console_scripts': [

@@ -54,3 +54,5 @@ keap/scripts/__pycache__/
 keap_python.egg-info/
 
 build/
+/netsuite-certificate.pem
+/netsuite-key.pem

@@ -1,10 +1,13 @@
 import json
+import os
 
 import click as click
 from click import prompt
 
 from netsuite_python.netsuite.Netsuite import Netsuite
 from netsuite_python.netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
+from OpenSSL.SSL import FILETYPE_PEM
+from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
 
 
 @click.group()
@@ -16,8 +19,54 @@ def cli():
 
 
 @cli.command()
+def generate_certificate():
+    CN = prompt("Domain", hide_input=False)
+    ORG = prompt("Organization", hide_input=False)
+    ORG_UNIT = prompt("Department", hide_input=False)
+    L = prompt("City", hide_input=False)
+    ST = prompt("State", hide_input=False)
+    C = prompt("Country", hide_input=False)
+    EMAIL = prompt("Email", hide_input=False)
+
+    NETSUITE_KEY_FILE = prompt("Netsuite Key FIle Name['./netsuite-key']: ", default=api_settings.NETSUITE_KEY_FILE)
+    CERTIFICATE_FILE = './netsuite-certificate.pem'
+
+    key = PKey()
+    key.generate_key(TYPE_RSA, 4096)
+
+    cert = X509()
+
+    subject = cert.get_subject()
+    subject.CN = CN
+    subject.O = ORG
+    subject.OU = ORG_UNIT
+    subject.L = L
+    subject.ST = ST
+    subject.C = C
+    subject.emailAddress = EMAIL
+
+    cert.set_version(2)
+    cert.set_issuer(subject)
+    cert.set_subject(subject)
+    cert.set_serial_number(int.from_bytes(os.urandom(16), byteorder="big"))
+    # cert.set_serial_number(int(rand.bytes(16).encode('hex'), 16))
+    cert.gmtime_adj_notBefore(0)
+    cert.gmtime_adj_notAfter(31536000)
+    cert.set_pubkey(key)
+    cert.sign(key, 'sha256')
+
+    with open(CERTIFICATE_FILE, 'wb+') as f:
+        f.write(dump_certificate(FILETYPE_PEM, cert))
+    with open(NETSUITE_KEY_FILE, 'wb+') as f:
+        f.write(dump_privatekey(FILETYPE_PEM, key))
+
+
+@cli.command()
 def generate_client_config():
     client_id = prompt("What is your client id?", hide_input=False)
+    cert_id = prompt("What is your Netsuite certificate id?", hide_input=False)
+    cert_file = prompt("Name of Netsuite Key File['netsuite-key.pem']?", hide_input=False)
+
     # client_secret = prompt("What is your client secret?", hide_input=True)
     # redirect_url = prompt("Redirect URL", default=api_settings.REDIRECT_URL)
     netsuite_app_name = prompt("What is the netsuite application name?", hide_input=False)
@@ -30,6 +79,8 @@ def generate_client_config():
 
     creds = {
         'CLIENT_ID': client_id,
+        'NETSUITE_KEY_FILE': cert_file,
+        'CERT_ID': cert_id,
         # 'CLIENT_SECRET': client_secret,
         # 'REDIRECT_URL': redirect_url,
         'NETSUITE_APP_NAME': netsuite_app_name,
@@ -86,26 +137,6 @@ def get_access_token(ctx, credentials_file):
                 click.echo(netsuite.token.__dict__)
             else:
                 click.echo(f"Saved to {credentials_file}")
-
-
-@cli.command()
-@click.option('--credentials-file', '--cf', type=click.File("r"), default=api_settings.CREDENTIALS_PATH)
-@click.option('--app', '--a', type=click.STRING, default='default')
-def refresh_access_token(credentials_file, app):
-    """Refresh Netsuite access token"""
-    try:
-        creds = json.load(credentials_file)
-    except Exception as e:
-        click.echo("Failed to load credentials file")
-        return
-
-    if app:
-        creds['APP_NAME'] = app
-
-    netsuite = Netsuite(
-        config=creds
-    )
-    netsuite.refresh_access_token()
 
 
 if __name__ == "__main__":
