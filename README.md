@@ -8,9 +8,9 @@ This library makes it easy to set up a Netsuite authorization without needing a 
 ## What do I need to get set up? ##
 * Run `pip install netsuite-python`
 * Activate your python VENV
-* If using virtual environment
-    * Activate your virtual environment
-    * `netsuite = python venv/bin/keap`
+* If using virtual environment 
+  * Activate your virtual environment
+  * `netsuite = python venv/bin/keap`
 
 * #### Notes ####
   * Requirements
@@ -44,7 +44,7 @@ This library makes it easy to set up a Netsuite authorization without needing a 
     * Application: Application Created for this integration
     * Certificate: Click "Choose A File" and upload the PUBLIC Cert (NOT PRIVATE KEY)
 * Copy the Certificate ID
-## Setting up Keap SDK in a project ##
+## Setting up Netsuite SDK in a project ##
 * Run `netsuite generate-client-config`
     * It will ask you for information obtained above: You can use all the defaults
         * Client ID

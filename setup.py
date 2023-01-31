@@ -8,6 +8,7 @@ setup(
     version='1.0.7',
     description='Python SDK for Netsuite API with Django Integration',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://bitbucket.org/theapiguys/netsuite_python',
     readme="README.md",
     author='Will @ TheAPIGuys',
