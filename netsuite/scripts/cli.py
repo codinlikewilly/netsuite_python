@@ -65,7 +65,7 @@ def generate_certificate():
 def generate_client_config():
     client_id = prompt("What is your client id?", hide_input=False)
     cert_id = prompt("What is your Netsuite certificate id?", hide_input=False)
-    cert_file = prompt("Name of Netsuite Key File['netsuite-key.pem']?", hide_input=False)
+    cert_file = prompt("Name of Netsuite Key File['netsuite-key.pem']?", hide_input=False, default='netsuite-key.pem')
 
     # client_secret = prompt("What is your client secret?", hide_input=True)
     # redirect_url = prompt("Redirect URL", default=api_settings.REDIRECT_URL)

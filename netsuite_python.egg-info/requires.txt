@@ -1,6 +1,6 @@
 Click
 requests
-jwt
+PyJWT
 urllib3>=1.15
 six>=1.10
 certifi
