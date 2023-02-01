@@ -104,22 +104,22 @@ All URIs are relative to *https://{App_Name}.suitetalk.api.netsuite.com/services
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ContactApi* | [**contact_get**](netsuite/swagger_client/docs/ContactApi.md#**contact_get**) | **GET** /contact | Get list of records.
-*ContactApi* | [**contact_id_delete**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_delete**) | **DELETE** /contact/{id} | Remove record.
-*ContactApi* | [**contact_id_get**](netsuite/swagger_client/docs/ContactApi.md#contact_id_get) | **GET** /contact/{id} | Get record.
-*ContactApi* | [**contact_id_patch**](netsuite/swagger_client/docs/ContactApi.md#contact_id_patch) | **PATCH** /contact/{id} | Update record.
-*ContactApi* | [**contact_id_put**](netsuite/swagger_client/docs/ContactApi.md#contact_id_put) | **PUT** /contact/{id} | Insert or update record.
-*ContactApi* | [**contact_post**](netsuite/swagger_client/docs/ContactApi.md#contact_post) | **POST** /contact | Insert record.
-*CustomerApi* | [**customer_get**](netsuite/swagger_client/docs/CustomerApi.md#customer_get) | **GET** /customer | Get list of records.
-*CustomerApi* | [**customer_id_delete**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_delete) | **DELETE** /customer/{id} | Remove record.
-*CustomerApi* | [**customer_id_get**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_get) | **GET** /customer/{id} | Get record.
-*CustomerApi* | [**customer_id_patch**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_patch) | **PATCH** /customer/{id} | Update record.
-*CustomerApi* | [**customer_id_put**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_put) | **PUT** /customer/{id} | Insert or update record.
-*CustomerApi* | [**customer_idtransform_cash_sale_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_cash_sale_post) | **POST** /customer/{id}/!transform/cashSale | Transform to cashSale.
-*CustomerApi* | [**customer_idtransform_invoice_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_invoice_post) | **POST** /customer/{id}/!transform/invoice | Transform to invoice.
-*CustomerApi* | [**customer_idtransform_sales_order_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_sales_order_post) | **POST** /customer/{id}/!transform/salesOrder | Transform to salesOrder.
-*CustomerApi* | [**customer_idtransform_vendor_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_vendor_post) | **POST** /customer/{id}/!transform/vendor | Transform to vendor.
-*CustomerApi* | [**customer_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_post) | **POST** /customer | Insert record.
+*ContactApi* | [**contact_get**](netsuite/swagger_client/docs/ContactApi.md#**contact_get****) | **GET** /contact | Get list of records.
+*ContactApi* | [**contact_id_delete**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_delete****) | **DELETE** /contact/{id} | Remove record.
+*ContactApi* | [**contact_id_get**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_get**) | **GET** /contact/{id} | Get record.
+*ContactApi* | [**contact_id_patch**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_patch**) | **PATCH** /contact/{id} | Update record.
+*ContactApi* | [**contact_id_put**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_put**) | **PUT** /contact/{id} | Insert or update record.
+*ContactApi* | [**contact_post**](netsuite/swagger_client/docs/ContactApi.md#**contact_post**) | **POST** /contact | Insert record.
+*CustomerApi* | [**customer_get**](netsuite/swagger_client/docs/CustomerApi.md#**customer_get**) | **GET** /customer | Get list of records.
+*CustomerApi* | [**customer_id_delete**](netsuite/swagger_client/docs/CustomerApi.md#**customer_id_delete**) | **DELETE** /customer/{id} | Remove record.
+*CustomerApi* | [**customer_id_get**](netsuite/swagger_client/docs/CustomerApi.md#**customer_id_get**) | **GET** /customer/{id} | Get record.
+*CustomerApi* | [**customer_id_patch**](netsuite/swagger_client/docs/CustomerApi.md#**customer_id_patch**) | **PATCH** /customer/{id} | Update record.
+*CustomerApi* | [**customer_id_put**](netsuite/swagger_client/docs/CustomerApi.md#**customer_id_put**) | **PUT** /customer/{id} | Insert or update record.
+*CustomerApi* | [**customer_idtransform_cash_sale_post**](netsuite/swagger_client/docs/CustomerApi.md#**customer_idtransform_cash_sale_post**) | **POST** /customer/{id}/!transform/cashSale | Transform to cashSale.
+*CustomerApi* | [**customer_idtransform_invoice_post**](netsuite/swagger_client/docs/CustomerApi.md#**customer_idtransform_invoice_post**) | **POST** /customer/{id}/!transform/invoice | Transform to invoice.
+*CustomerApi* | [**customer_idtransform_sales_order_post**](netsuite/swagger_client/docs/CustomerApi.md#**customer_idtransform_sales_order_post**) | **POST** /customer/{id}/!transform/salesOrder | Transform to salesOrder.
+*CustomerApi* | [**customer_idtransform_vendor_post**](netsuite/swagger_client/docs/CustomerApi.md#**customer_idtransform_vendor_post**) | **POST** /customer/{id}/!transform/vendor | Transform to vendor.
+*CustomerApi* | [**customer_post**](netsuite/swagger_client/docs/CustomerApi.md#**customer_post**) | **POST** /customer | Insert record.
 
 ## Documentation For Models
 
