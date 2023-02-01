@@ -135,6 +135,9 @@ class ApiClient(object):
                                                     collection_formats)
 
         # auth setting
+        if self.configuration.token.is_expired:
+            self.configuration.token_refresh_hook()
+
         self.update_params_for_auth(header_params, query_params, auth_settings)
 
         # body
@@ -321,13 +324,13 @@ class ApiClient(object):
                                    _preload_content, _request_timeout)
         else:
             thread = self.pool.apply_async(self.__call_api, (resource_path,
-                                           method, path_params, query_params,
-                                           header_params, body,
-                                           post_params, files,
-                                           response_type, auth_settings,
-                                           _return_http_data_only,
-                                           collection_formats,
-                                           _preload_content, _request_timeout))
+                                                             method, path_params, query_params,
+                                                             header_params, body,
+                                                             post_params, files,
+                                                             response_type, auth_settings,
+                                                             _return_http_data_only,
+                                                             collection_formats,
+                                                             _preload_content, _request_timeout))
         return thread
 
     def request(self, method, url, query_params=None, headers=None,
@@ -590,12 +593,12 @@ class ApiClient(object):
                 status=0,
                 reason=(
                     "Failed to parse `{0}` as datetime object"
-                    .format(string)
+                        .format(string)
                 )
             )
 
     def __hasattr(self, object, name):
-            return name in object.__class__.__dict__
+        return name in object.__class__.__dict__
 
     def __deserialize_model(self, data, klass):
         """Deserializes list or dict to model.

@@ -89,7 +89,6 @@ class Netsuite:
 
     def request_access_token(self):
         json_web_token = self.get_jwt()
-        print(json_web_token)
         data = {
             'grant_type': 'client_credentials',
             'client_assertion_type': 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',

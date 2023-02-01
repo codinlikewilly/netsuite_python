@@ -47,7 +47,9 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
         # Temp file folder for downloading files
         """Constructor"""
         # Default Base url
-        self.access_token = None
+        self.token = None
+        # self.access_token = None
+        self.token_refresh_hook = None
         self.app_name = None
         self.host = f"https://{self.app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
         self.temp_folder_path = None
@@ -235,7 +237,7 @@ class Configuration(six.with_metaclass(TypeWithDefault, object)):
                 'type': 'oauth2',
                 'in': 'header',
                 'key': 'Authorization',
-                'value': 'Bearer ' + self.access_token
+                'value': 'Bearer ' + self.token.access_token
             }
         }
 
