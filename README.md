@@ -100,7 +100,7 @@ ns_customer_api = netsuite.REST_CLIENT.customer_api
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://472052.suitetalk.api.netsuite.com/services/rest/record/v1*
+All URIs are relative to *https://{App_Name}.suitetalk.api.netsuite.com/services/rest/record/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
