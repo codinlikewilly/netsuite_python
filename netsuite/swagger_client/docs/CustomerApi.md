@@ -61,14 +61,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.oracle.resource+json; type=collection, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_id_delete**
 > customer_id_delete(id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key)
@@ -111,14 +111,14 @@ void (empty response body)
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_id_get**
 > Customer customer_id_get(id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, expand_sub_resources=expand_sub_resources, simple_enum_format=simple_enum_format, fields=fields)
@@ -168,14 +168,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/vnd.oracle.resource+json; type=singular, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_id_patch**
 > customer_id_patch(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace, replace_selected_fields=replace_selected_fields)
@@ -228,14 +228,14 @@ void (empty response body)
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_id_put**
 > customer_id_put(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace, replace_selected_fields=replace_selected_fields)
@@ -288,14 +288,14 @@ void (empty response body)
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_idtransform_cash_sale_post**
 > NsResource customer_idtransform_cash_sale_post(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace)
@@ -347,14 +347,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=singular, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_idtransform_invoice_post**
 > NsResource customer_idtransform_invoice_post(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace)
@@ -406,14 +406,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=singular, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_idtransform_sales_order_post**
 > NsResource customer_idtransform_sales_order_post(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace)
@@ -465,14 +465,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=singular, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_idtransform_vendor_post**
 > NsResource customer_idtransform_vendor_post(body, id, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace)
@@ -524,14 +524,14 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=singular, application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 
 # **customer_post**
 > customer_post(body, prefer=prefer, x_net_suite_idempotency_key=x_net_suite_idempotency_key, x_net_suite_property_name_validation=x_net_suite_property_name_validation, x_net_suite_property_value_validation=x_net_suite_property_value_validation, replace=replace)
@@ -580,12 +580,12 @@ void (empty response body)
 
 ### Authorization
 
-[oAuth2ClientCredentials](../README.md#oAuth2ClientCredentials)
+[oAuth2ClientCredentials](../../../README.md#oAuth2ClientCredentials)
 
 ### HTTP request headers
 
  - **Content-Type**: application/vnd.oracle.resource+json; type=singular
  - **Accept**: application/vnd.oracle.resource+json; type=error
 
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+[[Back to top]](#) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../../README.md#documentation-for-models) [[Back to README]](../../../README.md)
 

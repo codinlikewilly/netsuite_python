@@ -91,3 +91,85 @@ netsuite = Netsuite()
 ns_contact_api = netsuite.REST_CLIENT.contact_api
 ns_customer_api = netsuite.REST_CLIENT.customer_api
 ```
+
+## Example Usage ##
+ ```
+ print(ns_contact_api.contact_id_get(id=1413220))
+ ```
+
+
+## Documentation for API Endpoints
+
+All URIs are relative to *https://472052.suitetalk.api.netsuite.com/services/rest/record/v1*
+
+Class | Method | HTTP request | Description
+------------ | ------------- | ------------- | -------------
+*ContactApi* | [**contact_get**](netsuite/swagger_client/docs/ContactApi.md#**contact_get**) | **GET** /contact | Get list of records.
+*ContactApi* | [**contact_id_delete**](netsuite/swagger_client/docs/ContactApi.md#**contact_id_delete**) | **DELETE** /contact/{id} | Remove record.
+*ContactApi* | [**contact_id_get**](netsuite/swagger_client/docs/ContactApi.md#contact_id_get) | **GET** /contact/{id} | Get record.
+*ContactApi* | [**contact_id_patch**](netsuite/swagger_client/docs/ContactApi.md#contact_id_patch) | **PATCH** /contact/{id} | Update record.
+*ContactApi* | [**contact_id_put**](netsuite/swagger_client/docs/ContactApi.md#contact_id_put) | **PUT** /contact/{id} | Insert or update record.
+*ContactApi* | [**contact_post**](netsuite/swagger_client/docs/ContactApi.md#contact_post) | **POST** /contact | Insert record.
+*CustomerApi* | [**customer_get**](netsuite/swagger_client/docs/CustomerApi.md#customer_get) | **GET** /customer | Get list of records.
+*CustomerApi* | [**customer_id_delete**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_delete) | **DELETE** /customer/{id} | Remove record.
+*CustomerApi* | [**customer_id_get**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_get) | **GET** /customer/{id} | Get record.
+*CustomerApi* | [**customer_id_patch**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_patch) | **PATCH** /customer/{id} | Update record.
+*CustomerApi* | [**customer_id_put**](netsuite/swagger_client/docs/CustomerApi.md#customer_id_put) | **PUT** /customer/{id} | Insert or update record.
+*CustomerApi* | [**customer_idtransform_cash_sale_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_cash_sale_post) | **POST** /customer/{id}/!transform/cashSale | Transform to cashSale.
+*CustomerApi* | [**customer_idtransform_invoice_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_invoice_post) | **POST** /customer/{id}/!transform/invoice | Transform to invoice.
+*CustomerApi* | [**customer_idtransform_sales_order_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_sales_order_post) | **POST** /customer/{id}/!transform/salesOrder | Transform to salesOrder.
+*CustomerApi* | [**customer_idtransform_vendor_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_idtransform_vendor_post) | **POST** /customer/{id}/!transform/vendor | Transform to vendor.
+*CustomerApi* | [**customer_post**](netsuite/swagger_client/docs/CustomerApi.md#customer_post) | **POST** /customer | Insert record.
+
+## Documentation For Models
+
+ - [Contact](netsuite/swagger_client/docs/Contact.md)
+ - [ContactCollection](netsuite/swagger_client/docs/ContactCollection.md)
+ - [ContactCustomForm](netsuite/swagger_client/docs/ContactCustomForm.md)
+ - [Customer](netsuite/swagger_client/docs/Customer.md)
+ - [CustomerAddressBookAddressBookAddress](netsuite/swagger_client/docs/CustomerAddressBookAddressBookAddress.md)
+ - [CustomerAddressBookCollection](netsuite/swagger_client/docs/CustomerAddressBookCollection.md)
+ - [CustomerAddressBookElement](netsuite/swagger_client/docs/CustomerAddressBookElement.md)
+ - [CustomerAlcoholRecipientType](netsuite/swagger_client/docs/CustomerAlcoholRecipientType.md)
+ - [CustomerCampaignsCollection](netsuite/swagger_client/docs/CustomerCampaignsCollection.md)
+ - [CustomerCampaignsElement](netsuite/swagger_client/docs/CustomerCampaignsElement.md)
+ - [CustomerCollection](netsuite/swagger_client/docs/CustomerCollection.md)
+ - [CustomerContactRolesCollection](netsuite/swagger_client/docs/CustomerContactRolesCollection.md)
+ - [CustomerContactRolesElement](netsuite/swagger_client/docs/CustomerContactRolesElement.md)
+ - [CustomerCustomForm](netsuite/swagger_client/docs/CustomerCustomForm.md)
+ - [CustomerEmailPreference](netsuite/swagger_client/docs/CustomerEmailPreference.md)
+ - [CustomerGlobalSubscriptionStatus](netsuite/swagger_client/docs/CustomerGlobalSubscriptionStatus.md)
+ - [CustomerGroupPricingCollection](netsuite/swagger_client/docs/CustomerGroupPricingCollection.md)
+ - [CustomerGroupPricingElement](netsuite/swagger_client/docs/CustomerGroupPricingElement.md)
+ - [CustomerItemPricingCollection](netsuite/swagger_client/docs/CustomerItemPricingCollection.md)
+ - [CustomerItemPricingElement](netsuite/swagger_client/docs/CustomerItemPricingElement.md)
+ - [CustomerLanguage](netsuite/swagger_client/docs/CustomerLanguage.md)
+ - [CustomerNegativeNumberFormat](netsuite/swagger_client/docs/CustomerNegativeNumberFormat.md)
+ - [CustomerNumberFormat](netsuite/swagger_client/docs/CustomerNumberFormat.md)
+ - [CustomerShippingCarrier](netsuite/swagger_client/docs/CustomerShippingCarrier.md)
+ - [CustomerSymbolPlacement](netsuite/swagger_client/docs/CustomerSymbolPlacement.md)
+ - [CustomerThirdPartyCarrier](netsuite/swagger_client/docs/CustomerThirdPartyCarrier.md)
+ - [CustomeraddressBookaddressBookAddressCountry](netsuite/swagger_client/docs/CustomeraddressBookaddressBookAddressCountry.md)
+ - [NsError](netsuite/swagger_client/docs/NsError.md)
+ - [NsErrorOerrorDetails](netsuite/swagger_client/docs/NsErrorOerrorDetails.md)
+ - [NsLink](netsuite/swagger_client/docs/NsLink.md)
+ - [NsResource](netsuite/swagger_client/docs/NsResource.md)
+ - [NsResourceCollection](netsuite/swagger_client/docs/NsResourceCollection.md)
+ - [OneOfcontactCompany](netsuite/swagger_client/docs/OneOfcontactCompany.md)
+ - [OneOfcontactCustentityCourseAttended](netsuite/swagger_client/docs/OneOfcontactCustentityCourseAttended.md)
+ - [OneOfcontactCustentityEnergyEffAttended](netsuite/swagger_client/docs/OneOfcontactCustentityEnergyEffAttended.md)
+ - [OneOfcontactCustentityHitachiCourseAttended](netsuite/swagger_client/docs/OneOfcontactCustentityHitachiCourseAttended.md)
+ - [OneOfcontactCustentityHpCourseAttended](netsuite/swagger_client/docs/OneOfcontactCustentityHpCourseAttended.md)
+ - [OneOfcontactCustentityPvCourseAtteneded](netsuite/swagger_client/docs/OneOfcontactCustentityPvCourseAtteneded.md)
+ - [OneOfcontactCustentitySolCourseAttended](netsuite/swagger_client/docs/OneOfcontactCustentitySolCourseAttended.md)
+ - [OneOfcontactCustentityUnventHotWaterG3](netsuite/swagger_client/docs/OneOfcontactCustentityUnventHotWaterG3.md)
+ - [OneOfcontactCustentityWaterRegulations1999](netsuite/swagger_client/docs/OneOfcontactCustentityWaterRegulations1999.md)
+ - [OneOfcustomerCustentityCourseAttended](netsuite/swagger_client/docs/OneOfcustomerCustentityCourseAttended.md)
+ - [OneOfcustomerCustentityEnergyEffAttended](netsuite/swagger_client/docs/OneOfcustomerCustentityEnergyEffAttended.md)
+ - [OneOfcustomerCustentityHitachiCourseAttended](netsuite/swagger_client/docs/OneOfcustomerCustentityHitachiCourseAttended.md)
+ - [OneOfcustomerCustentityHpCourseAttended](netsuite/swagger_client/docs/OneOfcustomerCustentityHpCourseAttended.md)
+ - [OneOfcustomerCustentityPvCourseAtteneded](netsuite/swagger_client/docs/OneOfcustomerCustentityPvCourseAtteneded.md)
+ - [OneOfcustomerCustentitySolCourseAttended](netsuite/swagger_client/docs/OneOfcustomerCustentitySolCourseAttended.md)
+ - [OneOfcustomerCustentityUnventHotWaterG3](netsuite/swagger_client/docs/OneOfcustomerCustentityUnventHotWaterG3.md)
+ - [OneOfcustomerCustentityWaterRegulations1999](netsuite/swagger_client/docs/OneOfcustomerCustentityWaterRegulations1999.md)
+ - [OneOfcustomerItemPricingElementItem](netsuite/swagger_client/docs/OneOfcustomerItemPricingElementItem.md)

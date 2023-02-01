@@ -487,5 +487,5 @@ Name | Type | Description | Notes
 **custentity_9572_ddcust_entitybank_sub** | [**NsResource**](NsResource.md) |  | [optional] 
 **custentity_website_existing** | [**NsResource**](NsResource.md) |  | [optional] 
 
-[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+[[Back to Model list]](../../../README.md#documentation-for-models) [[Back to API list]](../../../README.md#documentation-for-api-endpoints) [[Back to README]](../../../README.md)
 
