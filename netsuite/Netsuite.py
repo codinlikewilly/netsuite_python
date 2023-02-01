@@ -1,32 +1,19 @@
-import base64
 import json
-import os
 import pathlib
-
 import jwt
 from datetime import datetime, timedelta
 from pathlib import Path
-from urllib.parse import urlencode
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
 from netsuite.swagger_client.rest_client import RestClient
 from netsuite.settings import APISettings
 from netsuite.storages import BaseStorage, JSONStorage
 
-# NETSUITE_CERT_ID = "o3rCX1bKSBEm8PqpjwwQuHZ2cvJnIC2uo0KsQxbahMg"
-# BASE_DIR = str(pathlib.Path(__file__).parent.resolve())
-# NETSUITE_KEY_FILENAME = "netsuite-key.pem"
-# NETSUITE_KEY_PATH = (os.path.join(BASE_DIR, "keys", f"{NETSUITE_KEY_FILENAME}"))
-
 
 class Netsuite:
-    # authorize_url = 'https://signin.infusionsoft.com/app/oauth/authorize'
-    # access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
     app_name: str = None
     storage: BaseStorage = None
     api_settings: APISettings
-    # xml_client = None
-    # rest_v1 = None
     rest_client = None
 
     def __init__(self, config: dict = None, config_file: Path = None):
@@ -35,6 +22,13 @@ class Netsuite:
         if config_file:
             with open(config_file, 'r') as f:
                 config = json.load(f)
+        if config is None and config_file is None:
+            try:
+                with open(pathlib.Path(APISettings().defaults.get("CREDENTIALS_PATH")), 'r') as f:
+                    config = json.load(f)
+            except Exception as e:
+                raise Exception("No Configuration Present. Try Generating one.")
+
         self.api_settings = APISettings(config)
         if not self.api_settings.CLIENT_ID:
             raise Exception("Missing Client Id")
@@ -58,12 +52,6 @@ class Netsuite:
         self.rest_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest" \
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
-
-    # @property
-    # def REST_V1(self):
-    #     if not self.rest_v1:
-    #         self.rest_v1 = REST_V1(self)
-    #     return self.rest_v1
 
     @property
     def REST_CLIENT(self):
@@ -124,4 +112,3 @@ class Netsuite:
             raise Exception(f"{app_name} does not have a token in storage, please authenticate")
         # self.rest_v1 = REST_V1(self)
         self.rest_client = RestClient(self)
-
