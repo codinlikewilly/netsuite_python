@@ -70,3 +70,24 @@ This library makes it easy to set up a Netsuite authorization without needing a 
 
 
 ## Usage ##
+
+
+It is pretty simple to get started using the SDK once you have a valid token.
+
+### Setup Netsuite ###
+```
+import pathlib
+from netsuite import Netsuite
+
+#Include config file, config dict, or leave empty to use default setup
+
+# w/ config file 
+# netsuite = Netsuite(config_file=pathlib.Path('./netsuite-credentials.json'))
+
+# using default 
+netsuite = Netsuite()
+
+#initialize apis
+ns_contact_api = netsuite.REST_CLIENT.contact_api
+ns_customer_api = netsuite.REST_CLIENT.customer_api
+```
