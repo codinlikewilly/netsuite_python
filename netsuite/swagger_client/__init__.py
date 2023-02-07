@@ -17,6 +17,7 @@ from __future__ import absolute_import
 # import apis into sdk package
 from netsuite.swagger_client.api.contact_api import ContactApi
 from netsuite.swagger_client.api.customer_api import CustomerApi
+from netsuite.swagger_client.api.query_api import QueryApi
 # import ApiClient
 from netsuite.swagger_client.api_client import ApiClient
 from netsuite.swagger_client.configuration import Configuration

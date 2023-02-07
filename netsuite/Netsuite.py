@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
-from netsuite.swagger_client.rest_client import RestClient
+from netsuite.swagger_client.rest_client import RestClient, QueryClient
 from netsuite.settings import APISettings
 from netsuite.storages import BaseStorage, JSONStorage
 
@@ -15,6 +15,7 @@ class Netsuite:
     storage: BaseStorage = None
     api_settings: APISettings
     rest_client = None
+    query_client = None
 
     def __init__(self, config: dict = None, config_file: Path = None):
         if config and config_file:
@@ -58,6 +59,12 @@ class Netsuite:
         if not self.rest_client:
             self.rest_client = RestClient(self)
         return self.rest_client
+
+    @property
+    def QUERY_CLIENT(self):
+        if not self.query_client:
+            self.query_client=QueryClient(self)
+        return self.query_client
 
     @property
     def token(self) -> NetsuiteToken:
@@ -111,3 +118,9 @@ class Netsuite:
             raise Exception(f"{app_name} does not have a token in storage, please authenticate")
         # self.rest_v1 = REST_V1(self)
         self.rest_client = RestClient(self)
+
+    def get_token(self):
+        if not self.token.is_expired:
+            return self.token
+        else:
+            return self.request_access_token()
