@@ -133,6 +133,6 @@ class Netsuite:
             status_dict = {}
             for status in statuses:
                 status_dict[f"{status.get('entitytype').upper()}-{status.get('name').upper()}"] = status.get('key')
-            self.statuses = status_dict
+            self.status_dict = status_dict
 
-        return self.statuses
+        return self.status_dict
