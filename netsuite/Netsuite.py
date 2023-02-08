@@ -53,6 +53,7 @@ class Netsuite:
         self.rest_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest" \
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+        self.status_dict = None
 
     @property
     def REST_CLIENT(self):
@@ -124,3 +125,14 @@ class Netsuite:
             return self.token
         else:
             return self.request_access_token()
+
+    def get_status_dict(self):
+        if self.status_dict is None:
+            query = "SELECT * FROM EntityStatus WHERE inactive = 'F'"
+            statuses = self.QUERY_CLIENT.query_api.execute_query(query=query)
+            status_dict = {}
+            for status in statuses:
+                status_dict[f"{status.get('entitytype').upper()}-{status.get('name').upper()}"] = status.get('key')
+            self.statuses = status_dict
+
+        return self.statuses
