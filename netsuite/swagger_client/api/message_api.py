@@ -119,7 +119,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=collection', 'application/vnd.oracle.resource+json; type=error'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message', 'GET',
@@ -220,7 +220,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=error'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message/{id}', 'DELETE',
@@ -333,7 +333,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=singular', 'application/vnd.oracle.resource+json; type=error'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message/{id}', 'GET',
@@ -462,7 +462,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=singular'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message/{id}', 'PATCH',
@@ -591,7 +591,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=singular'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message/{id}', 'PUT',
@@ -708,7 +708,7 @@ class MessageApi(object):
             ['application/vnd.oracle.resource+json; type=singular'])  # noqa: E501
 
         # Authentication setting
-        auth_settings = ['OAuth2ClientCredentials']  # noqa: E501
+        auth_settings = ['oAuth2ClientCredentials']  # noqa: E501
 
         return self.api_client.call_api(
             '/message', 'POST',
