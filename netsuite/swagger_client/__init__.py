@@ -18,6 +18,7 @@ from __future__ import absolute_import
 from netsuite.swagger_client.api.contact_api import ContactApi
 from netsuite.swagger_client.api.customer_api import CustomerApi
 from netsuite.swagger_client.api.query_api import QueryApi
+from netsuite.swagger_client.api.message_api import MessageApi
 # import ApiClient
 from netsuite.swagger_client.api_client import ApiClient
 from netsuite.swagger_client.configuration import Configuration
@@ -72,3 +73,14 @@ from netsuite.swagger_client.models.one_ofcustomer_custentity_sol_course_attende
 from netsuite.swagger_client.models.one_ofcustomer_custentity_unvent_hot_water_g3 import OneOfcustomerCustentityUnventHotWaterG3
 from netsuite.swagger_client.models.one_ofcustomer_custentity_water_regulations1999 import OneOfcustomerCustentityWaterRegulations1999
 from netsuite.swagger_client.models.one_ofcustomer_item_pricing_element_item import OneOfcustomerItemPricingElementItem
+from netsuite.swagger_client.models.message import Message
+from netsuite.swagger_client.models.message_collection import MessageCollection
+from netsuite.swagger_client.models.ns_error import NsError
+from netsuite.swagger_client.models.ns_error_oerror_details import NsErrorOerrorDetails
+from netsuite.swagger_client.models.ns_link import NsLink
+from netsuite.swagger_client.models.ns_resource import NsResource
+from netsuite.swagger_client.models.ns_resource_collection import NsResourceCollection
+from netsuite.swagger_client.models.one_ofmessage_author import OneOfmessageAuthor
+from netsuite.swagger_client.models.one_ofmessage_entity import OneOfmessageEntity
+from netsuite.swagger_client.models.one_ofmessage_primary_recipient import OneOfmessagePrimaryRecipient
+from netsuite.swagger_client.models.one_ofmessage_recipient import OneOfmessageRecipient
