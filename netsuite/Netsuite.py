@@ -54,17 +54,22 @@ class Netsuite:
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
         self.status_dict = None
+        self.categories = None
 
     @property
     def REST_CLIENT(self):
         if not self.rest_client:
             self.rest_client = RestClient(self)
+            self.get_customer_categories()
+            self.get_status_dict()
         return self.rest_client
 
     @property
     def QUERY_CLIENT(self):
         if not self.query_client:
             self.query_client=QueryClient(self)
+            self.get_customer_categories()
+            self.get_status_dict()
         return self.query_client
 
     @property
@@ -136,3 +141,15 @@ class Netsuite:
             self.status_dict = status_dict
 
         return self.status_dict
+
+    def get_customer_categories(self):
+        if self.token.access_token is None:
+            return None
+        if self.categories is None:
+            query = "SELECT * FROM customercategory WHERE isinactive = 'F'"
+            categories = self.QUERY_CLIENT.query_api.execute_query(query=query)
+            category_dict = {}
+            for category in categories:
+                category_dict[f"{category.get('name').upper()}"] = category.get('id')
+                self.categories = category_dict
+        return self.categories
