@@ -132,6 +132,8 @@ class Netsuite:
             return self.request_access_token()
 
     def get_status_dict(self):
+        if self.token.access_token is None:
+            return None
         if self.status_dict is None:
             query = "SELECT * FROM EntityStatus WHERE inactive = 'F'"
             statuses = self.QUERY_CLIENT.query_api.execute_query(query=query)
