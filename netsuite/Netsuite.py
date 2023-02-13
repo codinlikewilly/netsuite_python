@@ -60,16 +60,18 @@ class Netsuite:
     def REST_CLIENT(self):
         if not self.rest_client:
             self.rest_client = RestClient(self)
-            self.get_customer_categories()
-            self.get_status_dict()
+            if self.token.access_token is not None:
+                self.get_customer_categories()
+                self.get_status_dict()
         return self.rest_client
 
     @property
     def QUERY_CLIENT(self):
         if not self.query_client:
-            self.query_client=QueryClient(self)
-            self.get_customer_categories()
-            self.get_status_dict()
+            self.query_client = QueryClient(self)
+            if self.token.access_token is not None:
+                self.get_customer_categories()
+                self.get_status_dict()
         return self.query_client
 
     @property
