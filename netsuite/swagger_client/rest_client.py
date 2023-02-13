@@ -12,6 +12,7 @@ class RestClient:
         self.api_client = swagger_client.ApiClient(configuration=self.configuration)
         self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
         self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
+        self.message_api = swagger_client.MessageApi(api_client=self.api_client)
 
 
     def refresh_token(self):
