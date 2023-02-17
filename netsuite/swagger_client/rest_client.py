@@ -17,6 +17,7 @@ class RestClient:
 
     def refresh_token(self):
         self.configuration.token = self.netsuite.get_token()
+        return self.configuration.token
 
 class QueryClient:
     def __init__(self, netsuite):
@@ -31,6 +32,7 @@ class QueryClient:
 
     def refresh_token(self):
         self.configuration.token = self.netsuite.get_token()
+        return self.configuration.token
 
 
 

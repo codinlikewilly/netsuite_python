@@ -136,7 +136,8 @@ class ApiClient(object):
 
         # auth setting
         if self.configuration.token.is_expired:
-            self.configuration.token_refresh_hook()
+            self.configuration.token = self.configuration.token_refresh_hook()
+            self.rest_client = rest.RESTClientObject(self.configuration)
 
         self.update_params_for_auth(header_params, query_params, auth_settings)
 
@@ -493,6 +494,8 @@ class ApiClient(object):
         """
         if not auth_settings:
             return
+        if self.configuration.token.is_expired:
+            self.configuration.token = self.configuration.token_refresh_hook()
 
         for auth in auth_settings:
             auth_setting = self.configuration.auth_settings().get(auth)
