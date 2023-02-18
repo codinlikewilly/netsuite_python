@@ -13,6 +13,7 @@ import six
 import json
 
 from netsuite.swagger_client.api_client import ApiClient
+import netsuite.swagger_client.models
 
 
 class QueryApi(object):
@@ -23,7 +24,7 @@ class QueryApi(object):
         self.api_client = api_client
 
     def execute_query(self, query, **kwargs):
-        all_params = ['prefer']  # noqa: E501
+        all_params = ['prefer', 'response_type']  # noqa: E501
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
@@ -40,21 +41,49 @@ class QueryApi(object):
         else:
             header_params['Prefer'] = 'transient'
 
+        if 'response_type' in params:
+            if params['response_type'] is not None:
+                if hasattr(netsuite.swagger_client.models, params['response_type']):
+                    response_type = params['response_type']
+                else:
+                    response_type = None
+                    raise TypeError(f"{params['response_type']} is not a valid response type")
+            return_http_only_data = True
+            _preload_content = True
+            # print(params['response_type'])
+        else:
+            response_type = None
+            return_http_only_data = True
+            _preload_content = False
+
         # Authentication setting
         auth_settings = ['oAuth2ClientCredentials']
-        response = json.loads(self.api_client.call_api('',
-                                                       'POST',
-                                                       header_params=header_params,
-                                                       auth_settings=auth_settings,
-                                                       body={"q": f"{query}"},
-                                                       _return_http_data_only=True,
-                                                       _preload_content=False).data.decode('UTF-8'))
-        if 'items' in response:
-            if type(response.get("items")) is list:
-                return response.get("items")
+        response = self.api_client.call_api('',
+                                            'POST',
+                                            header_params=header_params,
+                                            auth_settings=auth_settings,
+                                            body={"q": f"{query}"},
+                                            response_type=response_type,
+                                            _return_http_data_only=return_http_only_data,
+                                            _preload_content=_preload_content)
+
+        if response_type is not None:
+            if hasattr(response, 'items'):
+                return response.items
             else:
-                items = []
-                items.append(response.get("items"))
-                return items
+                return response
+        if isinstance(response, tuple):
+            return response
+        if hasattr(response, 'data'):
+            if isinstance(response.data, bytes):
+                response = json.loads(response.data.decode('UTF-8'))
+                if 'items' in response:
+                    if type(response.get("items")) is list:
+                        return response.get("items")
+                    else:
+                        items = [response.get("items")]
+                        return items
+                else:
+                    return None
         else:
-            return None
+            return response
