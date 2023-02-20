@@ -44,6 +44,9 @@ class Netsuite:
         self.netsuite_app_name = self.api_settings.NETSUITE_APP_NAME
         self.netsuite_key_path = self.api_settings.NETSUITE_KEY_FILE
         self.netsuite_cert_id = self.api_settings.CERT_ID
+        # self.field_map = None
+        # if self.api_settings.NETSUITE_FIELD_MAP:
+        #     self.field_map = self.api_settings.NETSUITE_FIELD_MAP
 
         self.storage = self.api_settings.STORAGE_CLASS()
         if isinstance(self.api_settings.STORAGE_CLASS(), JSONStorage):
@@ -53,25 +56,20 @@ class Netsuite:
         self.rest_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest" \
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
-        self.status_dict = None
-        self.categories = None
 
     @property
     def REST_CLIENT(self):
         if not self.rest_client:
             self.rest_client = RestClient(self)
-            if self.token.access_token is not None:
-                self.get_customer_categories()
-                self.get_status_dict()
         return self.rest_client
 
     @property
     def QUERY_CLIENT(self):
         if not self.query_client:
             self.query_client = QueryClient(self)
-            if self.token.access_token is not None:
-                self.get_customer_categories()
-                self.get_status_dict()
+            # if self.token.access_token is not None:
+                # self.get_customer_categories()
+                # self.get_status_dict()
         return self.query_client
 
     @property
@@ -118,6 +116,9 @@ class Netsuite:
         response = requests.post(url, data=data, headers=headers)
         token = NetsuiteToken(**response.json())
         self.save_token(token)
+        # if token.access_token is not None:
+        #     self.get_customer_categories()
+        #     self.get_status_dict()
         return self.token
 
     def change_app(self, app_name):
@@ -133,27 +134,27 @@ class Netsuite:
         else:
             return self.request_access_token()
 
-    def get_status_dict(self):
-        if self.token.access_token is None:
-            return None
-        if self.status_dict is None:
-            query = "SELECT * FROM EntityStatus WHERE inactive = 'F'"
-            statuses = self.QUERY_CLIENT.query_api.execute_query(query=query)
-            status_dict = {}
-            for status in statuses:
-                status_dict[f"{status.get('entitytype').upper()}-{status.get('name').upper()}"] = status.get('key')
-            self.status_dict = status_dict
-
-        return self.status_dict
-
-    def get_customer_categories(self):
-        if self.token.access_token is None:
-            return None
-        if self.categories is None:
-            query = "SELECT * FROM customercategory WHERE isinactive = 'F'"
-            categories = self.QUERY_CLIENT.query_api.execute_query(query=query)
-            category_dict = {}
-            for category in categories:
-                category_dict[f"{category.get('name').upper()}"] = category.get('id')
-                self.categories = category_dict
-        return self.categories
+    # def get_status_dict(self):
+    #     if self.token.access_token is None:
+    #         return None
+    #     if self.status_dict is None:
+    #         query = "SELECT * FROM EntityStatus WHERE inactive = 'F'"
+    #         statuses = self.QUERY_CLIENT.query_api.execute_query(query=query)
+    #         status_dict = {}
+    #         for status in statuses:
+    #             status_dict[f"{status.get('entitytype').upper()}-{status.get('name').upper()}"] = status.get('key')
+    #         self.status_dict = status_dict
+    #
+    #     return self.status_dict
+    #
+    # def get_customer_categories(self):
+    #     if self.token.access_token is None:
+    #         return None
+    #     if self.categories is None:
+    #         query = "SELECT * FROM customercategory WHERE isinactive = 'F'"
+    #         categories = self.QUERY_CLIENT.query_api.execute_query(query=query)
+    #         category_dict = {}
+    #         for category in categories:
+    #             category_dict[f"{category.get('name').upper()}"] = category.get('id')
+    #             self.categories = category_dict
+    #     return self.categories

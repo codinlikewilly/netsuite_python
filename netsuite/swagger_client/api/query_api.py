@@ -87,3 +87,38 @@ class QueryApi(object):
                     return None
         else:
             return response
+
+
+    # ns_query_api.get_model_query('Customer', 'CustomerCollection', 'customer', "WHERE customer.lastmodifieddate >= TO_DATE('19/02/2023 18:00:22', 'DD/MM/YYYY HH24:MI:SS')", settings.NETSUITE_FIELD_MAP)
+    # def get_model_query(self, query_model_name: str = None, return_type: str = None,  table_name: str = None, filter_clause: Optional[str] = None, return_field_dict: Optional[dict] = None, ):
+    #     if hasattr(netsuite.swagger_client.models, query_model_name):
+    #         klass = getattr(netsuite.swagger_client.models, query_model_name)
+    #         class_types = klass.swagger_types
+    #         class_attributes = klass.attribute_map
+    #     else:
+    #         raise TypeError(f"{model_name} does not exist in netsuite.swagger_client.models")
+    #
+    #
+    #     return_fields = []
+    #     if return_field_dict is not None:
+    #         for item in return_field_dict:
+    #             value = return_field_dict.get(item)
+    #             if value in class_types:
+    #                 field_name = class_attributes.get(value)
+    #                 if class_types.get(value) == 'NsResource':
+    #                     return_fields.append(f"BUILTIN.DF({field_name}) AS {value}")
+    #                 else:
+    #                     return_fields.append(f"{field_name} AS {field_name}")
+    #
+    #     if len(return_fields) > 0:
+    #         fields = ','.join(return_fields)
+    #     else:
+    #         fields = '*'
+    #
+    #     query = f"SELECT {fields} FROM {table_name}"
+    #     # print(query)
+    #
+    #     if filter_clause is not None:
+    #         query = f"{query} {filter_clause}"
+    #     print(query)
+    #     return self.execute_query(query=query, response_type=query_model_name)
