@@ -65,7 +65,7 @@ class CustomerCustomForm(object):
         :param id: The id of this CustomerCustomForm.  # noqa: E501
         :type: str
         """
-        allowed_values = ["221", "147", "26", "-2", "247", "219", "-8", "383", "43", "252", "54"]  # noqa: E501
+        allowed_values = ["221", "147", "26", "-2", "247", "219", "-8", "383", "43", "252", "54", "99"]  # noqa: E501
         if id not in allowed_values:
             raise ValueError(
                 "Invalid value for `id` ({0}), must be one of {1}"  # noqa: E501
