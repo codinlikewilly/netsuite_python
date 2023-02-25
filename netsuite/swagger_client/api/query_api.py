@@ -24,7 +24,7 @@ class QueryApi(object):
         self.api_client = api_client
 
     def execute_query(self, query, **kwargs):
-        all_params = ['prefer', 'response_type']  # noqa: E501
+        all_params = ['prefer', 'response_type', 'limit']  # noqa: E501
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
@@ -36,10 +36,19 @@ class QueryApi(object):
         del params['kwargs']
 
         header_params = {}
+        query_params = {}
         if 'prefer' in params:
             header_params['Prefer'] = params['prefer']  # noqa: E501
         else:
             header_params['Prefer'] = 'transient'
+
+        if 'limit' in params:
+            print(params['limit'])
+            if params['limit'] is not None:
+                print('set')
+                query_params['limit'] = params['limit']
+            else:
+                query_params['limit'] = 500
 
         if 'response_type' in params:
             if params['response_type'] is not None:
@@ -61,6 +70,7 @@ class QueryApi(object):
         response = self.api_client.call_api('',
                                             'POST',
                                             header_params=header_params,
+                                            query_params=query_params,
                                             auth_settings=auth_settings,
                                             body={"q": f"{query}"},
                                             response_type=response_type,
