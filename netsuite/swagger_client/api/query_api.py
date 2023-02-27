@@ -24,7 +24,7 @@ class QueryApi(object):
         self.api_client = api_client
 
     def execute_query(self, query, **kwargs):
-        all_params = ['prefer', 'response_type', 'limit']  # noqa: E501
+        all_params = ['prefer', 'response_type', 'limit', 'offset']  # noqa: E501
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
@@ -49,6 +49,12 @@ class QueryApi(object):
                 query_params['limit'] = params['limit']
             else:
                 query_params['limit'] = 500
+
+        if 'offset' in params:
+            if params['offset'] is not None:
+                query_params['offset'] = params['offset']
+            else:
+                query_params['offset'] = 0
 
         if 'response_type' in params:
             if params['response_type'] is not None:
