@@ -44,6 +44,12 @@ This library makes it easy to set up a Netsuite authorization without needing a 
     * Application: Application Created for this integration
     * Certificate: Click "Choose A File" and upload the PUBLIC Cert (NOT PRIVATE KEY)
 * Copy the Certificate ID
+
+## Generate Netsuite Client ##
+* Run command to generate sdk using openapi 3.0 
+* method is generate_swagger_client
+* visit link returned from method and download result 
+* unzip the file and copy the "netsuite_client" folder from the directory into the projects root folder
 ## Setting up Netsuite SDK in a project ##
 * Run `netsuite generate-client-config`
     * It will ask you for information obtained above: You can use all the defaults
@@ -76,20 +82,15 @@ It is pretty simple to get started using the SDK once you have a valid token.
 
 ### Setup Netsuite ###
 ```
-import pathlib
 from netsuite import Netsuite
+import netsuite_client
+from netsuite_client.api.customer_api import CustomerApi
 
-#Include config file, config dict, or leave empty to use default setup
+netsuite = Netsuite(config_file=settings.NS_CREDENTIALS_PATH)
 
-# w/ config file 
-# netsuite = Netsuite(config_file=pathlib.Path('./netsuite-credentials.json'))
+customer_api = CustomerApi(netsuite.REST_CLIENT)
 
-# using default 
-netsuite = Netsuite()
-
-#initialize apis
-ns_contact_api = netsuite.REST_CLIENT.contact_api
-ns_customer_api = netsuite.REST_CLIENT.customer_api
+print(customer_api.customer_id_get(id=1617260))
 ```
 
 ## Example Usage ##

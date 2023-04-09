@@ -5,10 +5,19 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
-from netsuite.swagger_client.rest_client import RestClient, QueryClient
-from netsuite.swagger_client.restlet_client import RestletClient
+# from netsuite.swagger_client.restlet_client import RestletClient
 from netsuite.settings import APISettings
 from netsuite.storages import BaseStorage, JSONStorage
+from netsuite import api_clients
+
+
+client_exists = False
+try:
+    import netsuite_client
+    from netsuite_client.api import *
+    client_exists = True
+except ModuleNotFoundError or ImportError as err:
+    print('Rest Client needs to be generated')
 
 
 class Netsuite:
@@ -32,6 +41,7 @@ class Netsuite:
             except Exception as e:
                 raise Exception("No Configuration Present. Try Generating one.")
 
+
         self.api_settings = APISettings(config)
         if not self.api_settings.CLIENT_ID:
             raise Exception("Missing Client Id")
@@ -43,6 +53,7 @@ class Netsuite:
             raise Exception("Missing Netsuite Certificate ID.")
 
         self.app_name = self.api_settings.APP_NAME
+
         self.netsuite_app_name = self.api_settings.NETSUITE_APP_NAME
         self.netsuite_key_path = self.api_settings.NETSUITE_KEY_FILE
         self.netsuite_cert_id = self.api_settings.CERT_ID
@@ -61,23 +72,31 @@ class Netsuite:
 
     @property
     def REST_CLIENT(self):
-        if not self.rest_client:
-            self.rest_client = RestClient(self)
-        return self.rest_client
+        try:
+            if not self.rest_client:
+                if client_exists:
+                    self.rest_client = self.get_rest_client()
+                    return self.rest_client
+            else:
+                print('Client needs to be generated.')
+        except Exception as e:
+            print(e)
+
 
     @property
     def QUERY_CLIENT(self):
         if not self.query_client:
-            self.query_client = QueryClient(self)
+            self.query_client = self.QueryClient(self)
             # if self.token.access_token is not None:
                 # self.get_customer_categories()
                 # self.get_status_dict()
         return self.query_client
 
+
     @property
     def RESTLET_CLIENT(self):
         if not self.restlet_client:
-            self.restlet_client = RestletClient(self)
+            self.restlet_client = self.RestletClient(self)
         return self.restlet_client
 
     @property
@@ -129,18 +148,84 @@ class Netsuite:
         #     self.get_status_dict()
         return self.token
 
-    def change_app(self, app_name):
-        self.app_name = app_name
-        if not self.token.access_token:
-            raise Exception(f"{app_name} does not have a token in storage, please authenticate")
-        # self.rest_v1 = REST_V1(self)
-        self.rest_client = RestClient(self)
+    def generate_swagger_client(self):
+        token = self.storage.get_token(self.app_name)
+        url = f"https://{self.app_name}.suitetalk.api.netsuite.com/services/rest/record/v1/metadata-catalog"
+        params = {
+            'select': 'customer'
+        }
+        headers = {
+            'Accept': 'application/swagger+json',
+            'Authorization': f'Bearer {token.access_token}'
+        }
+        response = requests.get(url, headers=headers, params=params)
+        # print(token.access_token)
+        # print(response.json())
+        data = {
+            'options': {
+                'packageName': 'netsuite_client'
+            },
+            'generateSourceCodeOnly': 'True',
+            'spec': response.json()
+        }
+        headers2 = {
+            'Content-Type': 'application/json'
+        }
+        result = requests.post('https://api-latest-master.openapi-generator.tech/api/gen/clients/python',headers=headers2, json=data)
+        print(result.json())
+        # with open("./client_schema.json", "w") as outfile:
+        #     outfile.write(json.dumps(response.json()))
 
     def get_token(self):
         if not self.token.is_expired:
             return self.token
         else:
             return self.request_access_token()
+
+
+    def get_rest_client(self):
+        configuration = netsuite_client.configuration.Configuration(
+            host="https://472052.suitetalk.api.netsuite.com/services/rest/record/v1"
+        )
+        configuration.api_key['OAuth_1.0_authorization'] = self.get_token().access_token
+        configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
+        api_client = netsuite_client.api_client.ApiClient(configuration=configuration)
+        return api_client
+
+
+    class QueryClient:
+        def __init__(self, netsuite):
+            self.netsuite = netsuite
+            self.configuration = api_clients.Configuration()
+            self.configuration.token = netsuite.storage.get_token(netsuite.app_name)
+            self.configuration.token_refresh_hook = self.refresh_token
+            self.configuration.app_name = netsuite.netsuite_app_name
+            self.configuration.host = f"https://{self.configuration.app_name}.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql"
+            self.query_api_client = api_clients.ApiClient(configuration=self.configuration)
+            self.query_api = api_clients.QueryApi(api_client=self.query_api_client)
+
+        def refresh_token(self):
+            self.configuration.token = self.netsuite.get_token()
+            return self.configuration.token
+
+    class RestletClient:
+        def __init__(self, netsuite):
+            self.netsuite = netsuite
+            self.configuration = api_clients.Configuration()
+            self.configuration.token = netsuite.storage.get_token(netsuite.app_name)
+            self.configuration.token_refresh_hook = self.refresh_token
+            self.configuration.app_name = netsuite.netsuite_app_name
+            self.configuration.host = f"https://{self.configuration.app_name}.restlets.api.netsuite.com/app/site/hosting/restlet.nl"
+            self.api_client = api_clients.ApiClient(configuration=self.configuration)
+            self.restlet_api = api_clients.RestletApi(api_client=self.api_client)
+
+            # self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
+            # self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
+            # self.message_api = swagger_client.MessageApi(api_client=self.api_client)
+
+        def refresh_token(self):
+            self.configuration.token = self.netsuite.get_token()
+            return self.configuration.token
 
     # def get_status_dict(self):
     #     if self.token.access_token is None:
