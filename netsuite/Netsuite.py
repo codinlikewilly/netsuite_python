@@ -6,6 +6,7 @@ from pathlib import Path
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
 from netsuite.swagger_client.rest_client import RestClient, QueryClient
+from netsuite.swagger_client.restlet_client import RestletClient
 from netsuite.settings import APISettings
 from netsuite.storages import BaseStorage, JSONStorage
 
@@ -16,6 +17,7 @@ class Netsuite:
     api_settings: APISettings
     rest_client = None
     query_client = None
+    restlet_client = None
 
     def __init__(self, config: dict = None, config_file: Path = None):
         if config and config_file:
@@ -73,6 +75,12 @@ class Netsuite:
         return self.query_client
 
     @property
+    def RESTLET_CLIENT(self):
+        if not self.restlet_client:
+            self.restlet_client = RestletClient(self)
+        return self.restlet_client
+
+    @property
     def token(self) -> NetsuiteToken:
         return self.storage.get_token(self.app_name)
 
@@ -85,7 +93,7 @@ class Netsuite:
             private_key = pemfile.read()
         payload = {
             "iss": f"{self.api_settings.CLIENT_ID}",
-            "scope": "rest_webservices",
+            "scope": "restlets, rest_webservices",
             "aud": f"{self.access_token_url}",
             "exp": (datetime.now() + timedelta(seconds=3600)).timestamp(),
             "iat": datetime.now().timestamp()
