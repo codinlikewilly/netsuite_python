@@ -13,8 +13,8 @@ from netsuite import api_clients
 
 client_exists = False
 try:
-    import netsuite_client
-    from netsuite_client.api import *
+    import netsuite_rest_client
+    from netsuite_rest_client.api import *
     client_exists = True
 except ModuleNotFoundError or ImportError as err:
     print('Rest Client needs to be generated')
@@ -76,6 +76,7 @@ class Netsuite:
             if not self.rest_client:
                 if client_exists:
                     self.rest_client = self.get_rest_client()
+
                     return self.rest_client
             else:
                 print('Client needs to be generated.')
@@ -148,9 +149,14 @@ class Netsuite:
         #     self.get_status_dict()
         return self.token
 
-    def generate_swagger_client(self):
+    def generate_rest_client(self):
+        # from urllib.request import urlopen
+        # from tempfile import NamedTemporaryFile
+        # from shutil import unpack_archive
+        import zipfile, shutil
+        from io import BytesIO
         token = self.storage.get_token(self.app_name)
-        url = f"https://{self.app_name}.suitetalk.api.netsuite.com/services/rest/record/v1/metadata-catalog"
+        url = f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1/metadata-catalog"
         params = {
             'select': 'customer'
         }
@@ -173,6 +179,29 @@ class Netsuite:
         }
         result = requests.post('https://api-latest-master.openapi-generator.tech/api/gen/clients/python',headers=headers2, json=data)
         print(result.json())
+
+        # Defining the zip file URL
+        url = result.json().get('link')
+
+        # Split URL to get the file name
+        filename = url.split('/')[-1]
+
+        # Downloading the file by sending the request to the URL
+        req = requests.get(url)
+        print('Downloading Completed')
+
+        # extracting the zip file contents
+        file = zipfile.ZipFile(BytesIO(req.content))
+        file.extractall(path=self.api_settings.NETSUITE_CLIENT_PATH)
+
+        src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client/netsuite_client')
+        dst = Path(self.api_settings.NETSUITE_CLIENT_PATH)
+        shutil.copytree(src, dst, symlinks=False, ignore=None, ignore_dangling_symlinks=False,
+                        dirs_exist_ok=True)
+        print('Netsuite Rest Client Created')
+        # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
+        # print('temp folder removed.')
+
         # with open("./client_schema.json", "w") as outfile:
         #     outfile.write(json.dumps(response.json()))
 
@@ -184,13 +213,15 @@ class Netsuite:
 
 
     def get_rest_client(self):
-        configuration = netsuite_client.configuration.Configuration(
-            host="https://472052.suitetalk.api.netsuite.com/services/rest/record/v1"
+        configuration = netsuite_rest_client.configuration.Configuration(
+            host=f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
         )
+
         configuration.api_key['OAuth_1.0_authorization'] = self.get_token().access_token
         configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
-        api_client = netsuite_client.api_client.ApiClient(configuration=configuration)
-        return api_client
+        rest_client.api_client = netsuite_rest_client.api_client.ApiClient(configuration=configuration)
+        rest_client.customer_api = netsuite_rest_client.api.customer_api.CustomerApi(api_client)
+        return rest_client
 
 
     class QueryClient:

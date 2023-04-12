@@ -12,7 +12,31 @@ This library makes it easy to set up a Netsuite authorization without needing a 
   * Activate your virtual environment
   * `netsuite = python venv/bin/keap`
 
-* #### Notes ####
+## QUICK START ##
+
+### Prerequisite  Setup ###
+    1. Enable Services
+        * Rest Web Services
+        * Rest Web Services
+        * Rest Web Services
+        * Rest Web Services
+    2. Create a role for the integration with the following permissions:
+        * Access Token Management
+        * Log in using Access Tokens	
+        * Log in using OAuth 2.0 Access Tokens	
+        * OAuth 2.0 Authorized Applications Management	
+        * REST Web Services	
+        * SuiteApp Deployment	
+        * SuiteScript
+        * User Access Tokens	
+    3. Create an integration record 
+        * Check Client Credentials ( MAchine to Machine Grant) 
+        * STORE THE CLIENT ID 
+
+
+run ``` netsuite initialize ```
+
+ #### Notes ####
   * Requirements
     * Sandbox requires the same setup as Prod, it DOES NOT copy over
     * An administrator for the Netsuite app to follow the steps [here](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157771281570.html)

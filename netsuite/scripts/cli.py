@@ -3,12 +3,23 @@ import os
 
 import click as click
 from click import prompt
+from pathlib import Path
 
 from netsuite.Netsuite import Netsuite
 from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
+from rich import print
 
+def link(uri, label=None):
+    if label is None:
+        label = uri
+    parameters = ''
+
+    # OSC 8 ; params ; URI ST <name> OSC 8 ;; ST
+    escape_mask = '\033]8;{};{}\033\\{}\033]8;;\033\\'
+
+    return escape_mask.format(parameters, uri, label)
 
 @click.group()
 def cli():
@@ -17,9 +28,64 @@ def cli():
     """
     pass
 
+@cli.command()
+def initialize():
+    steps_completed = False
+    while not steps_completed:
+        steps_completed = prompt(f"Have you created the integration record by following the steps in the README?", default='y', type=click.BOOL, show_choices=True)
+        if steps_completed:
+            client_id = prompt("Client Id", hide_input=False)
+        else:
+            print('Read it and do the steps hoe https://bitbucket.org/theapiguys/netsuite_python/src/master/')
+
+    print("Generate Certificate", )
+    certificate_uploaded = False
+    while not certificate_uploaded:
+        certificate_uploaded = prompt(f"Have you generated a certificate?", default='y', type=click.BOOL, show_choices=True)
+        if certificate_uploaded:
+            certificate_id = prompt("Certificate ID: ", hide_input=False)
+        else:
+            generate_certificate()
+
+    netsuite_app_name = prompt("What is the netsuite application name? (Portion before app.netsuite.com)", hide_input=False)
+
+    app_name = prompt("App Name", default=api_settings.APP_NAME)
+    allow_none = prompt("Allow None", default=api_settings.ALLOW_NONE)
+    use_datetime = prompt("Use Datetime", default=api_settings.USE_DATETIME)
+    storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
+                           type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
+                           show_choices=True)
+
+    creds = {
+        'CLIENT_ID': client_id,
+        'CERT_ID': cert_id,
+        # 'CLIENT_SECRET': client_secret,
+        # 'REDIRECT_URL': redirect_url,
+        'NETSUITE_APP_NAME': netsuite_app_name,
+        'APP_NAME': app_name,
+        'ALLOW_NONE': allow_none,
+        'USE_DATETIME': use_datetime,
+        'STORAGE_CLASS': storage_class,
+    }
+
+    if storage_class == JSON_STORAGE:
+        creds['JSON_STORAGE_PATH'] = prompt("Token Storage File", default=api_settings.JSON_STORAGE_PATH,
+                                            type=click.Path(readable=True, writable=True))
+
+    with open(api_settings.CREDENTIALS_PATH, 'w') as f:
+        creds_json = json.dumps(creds, indent=4)
+        f.write(creds_json)
+        print(f"Netsuite Credentials written to: {api_settings.CREDENTIALS_PATH}")
+
+
+
+
 
 @cli.command()
 def generate_certificate():
+
+    print(f"BASE DIR: {api_settings.BASE_DIR}")
+
     CN = prompt("Domain", hide_input=False)
     ORG = prompt("Organization", hide_input=False)
     ORG_UNIT = prompt("Department", hide_input=False)
@@ -28,8 +94,6 @@ def generate_certificate():
     C = prompt("Country", hide_input=False)
     EMAIL = prompt("Email", hide_input=False)
 
-    NETSUITE_KEY_FILE = prompt("Netsuite Key FIle Name['./netsuite-key']: ", default=api_settings.NETSUITE_KEY_FILE)
-    CERTIFICATE_FILE = './netsuite-certificate.pem'
 
     key = PKey()
     key.generate_key(TYPE_RSA, 4096)
@@ -55,18 +119,25 @@ def generate_certificate():
     cert.set_pubkey(key)
     cert.sign(key, 'sha256')
 
-    with open(CERTIFICATE_FILE, 'wb+') as f:
-        f.write(dump_certificate(FILETYPE_PEM, cert))
-    with open(NETSUITE_KEY_FILE, 'wb+') as f:
-        f.write(dump_privatekey(FILETYPE_PEM, key))
 
+    with open(api_settings.NETSUITE_KEY_FILE, 'wb+') as f:
+        f.write(dump_privatekey(FILETYPE_PEM, key))
+        print(f"Netsuite Key File Created: {api_settings.NETSUITE_KEY_FILE} \n")
+
+    with open(api_settings.NETSUITE_CERTIFICATE_FILE, 'wb+') as f:
+        f.write(dump_certificate(FILETYPE_PEM, cert))
+        print(f"Netsuite Certificate Created: {api_settings.NETSUITE_CERTIFICATE_FILE} \n")
+        print(f"Steps to upload the certificate")
+        print(f"  1. Login to Netsuite")
+        print(f"  2. On top ribbon, go to Setup -> Integration -> Manage OAuth 2.0 Client Credentials Setup")
+        print(f"  3. Click New")
+        print(f"  4. Associate with your user, the integration record, and upload the netsuite_certificate.pem file from the path above.")
+        print(f"  5. Copy the Certificate ID for when you generate the client config")
 
 @cli.command()
 def generate_client_config():
     client_id = prompt("What is your client id?", hide_input=False)
     cert_id = prompt("What is your Netsuite certificate id?", hide_input=False)
-    cert_file = prompt("Name of Netsuite Key File['netsuite-key.pem']?", hide_input=False, default='netsuite-key.pem')
-
     # client_secret = prompt("What is your client secret?", hide_input=True)
     # redirect_url = prompt("Redirect URL", default=api_settings.REDIRECT_URL)
     netsuite_app_name = prompt("What is the netsuite application name?", hide_input=False)
@@ -79,7 +150,6 @@ def generate_client_config():
 
     creds = {
         'CLIENT_ID': client_id,
-        'NETSUITE_KEY_FILE': cert_file,
         'CERT_ID': cert_id,
         # 'CLIENT_SECRET': client_secret,
         # 'REDIRECT_URL': redirect_url,
@@ -97,13 +167,19 @@ def generate_client_config():
     save_to_file = prompt("Save settings to file?", default='y', type=click.BOOL, show_choices=True)
 
     if save_to_file:
-        file = prompt("Save settings to file?", default=api_settings.CREDENTIALS_PATH, type=click.File("w", ))
-        file.write(json.dumps(creds, indent=4))
+        with open(api_settings.CREDENTIALS_PATH, 'w') as f:
+            creds_json = json.dumps(creds, indent=4)
+            f.write(creds_json)
+            print(f"Netsuite Credentials written to: {api_settings.CREDENTIALS_PATH}")
     else:
         click.echo(creds)
 
     return creds
 
+@cli.command()
+def generate_rest_client():
+    netsuite = Netsuite()
+    netsuite.generate_rest_client()
 
 @cli.command()
 @click.option('--credentials-file', '--f', type=click.File('r'), default=api_settings.CREDENTIALS_PATH,

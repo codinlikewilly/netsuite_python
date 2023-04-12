@@ -13,6 +13,8 @@ NETSUITE settings, checking for user settings first, then falling
 back to the defaults.
 """
 from .module_loading import import_string
+from pathlib import Path
+import os
 
 django_imported = False
 try:
@@ -29,6 +31,20 @@ try:
 except ImportError as e:
     settings = None
 
+BASE_DIR = Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
+BASE_CONFIG_DIR = Path.joinpath(BASE_DIR, 'config')
+NETSUITE_CONFIG_DIR = Path.joinpath(BASE_CONFIG_DIR, 'netsuite')
+NETSUITE_TOKENS_DIR = Path.joinpath(BASE_CONFIG_DIR, 'tokens')
+PACKAGE_DIR = Path(__file__).parent.resolve()
+NETSUITE_CLIENT_DIR = Path.joinpath(PACKAGE_DIR, 'netsuite_rest_client')
+
+if not os.path.exists(NETSUITE_CONFIG_DIR):
+    os.makedirs(NETSUITE_CONFIG_DIR)
+if not os.path.exists(NETSUITE_TOKENS_DIR):
+    os.makedirs(NETSUITE_TOKENS_DIR)
+if not os.path.exists(NETSUITE_CLIENT_DIR):
+    os.makedirs(NETSUITE_CLIENT_DIR)
+
 
 JSON_STORAGE = 'netsuite.storages.JSONStorage'
 IN_MEMORY_STORAGE = 'netsuite.storages.InMemoryStorage'
@@ -42,7 +58,7 @@ DEFAULTS = {
     # API Configuration
     'NETSUITE_APP_NAME': None,
     'CLIENT_ID': None,
-    'NETSUITE_KEY_FILE': './netsuite-key.pem',
+
     'CERT_ID': None,
     # 'CLIENT_SECRET': None,
     # 'REDIRECT_URL': 'https://theapiguys.com',
@@ -50,11 +66,14 @@ DEFAULTS = {
     'ALLOW_NONE': False,
     'USE_DATETIME': True,
 
-    'STORAGE_CLASS': 'netsuite.storages.JSONStorage',
-    'CREDENTIALS_PATH': './netsuite-credentials.json',
-    'JSON_STORAGE_PATH': './netsuite-tokens.json',
-    'NETSUITE_CERTIFICATE_PATH': './netsuite-certificate.pem',
 
+
+    'STORAGE_CLASS': 'netsuite.storages.JSONStorage',
+    'CREDENTIALS_PATH': str(Path.joinpath(NETSUITE_CONFIG_DIR, 'netsuite_credentials.json')),
+    'JSON_STORAGE_PATH': str(Path.joinpath(NETSUITE_TOKENS_DIR, 'netsuite_tokens.json')),
+    'NETSUITE_CERTIFICATE_FILE': str(Path.joinpath(NETSUITE_CONFIG_DIR, 'netsuite_certificate.pem')),
+    'NETSUITE_KEY_FILE': str(Path.joinpath(NETSUITE_CONFIG_DIR, 'netsuite_key.pem')),
+    'NETSUITE_CLIENT_PATH': str(Path.joinpath(PACKAGE_DIR, 'netsuite_rest_client')),
     'APP_NAME': 'default',
 }
 
