@@ -36,7 +36,7 @@ BASE_CONFIG_DIR = Path.joinpath(BASE_DIR, 'config')
 NETSUITE_CONFIG_DIR = Path.joinpath(BASE_CONFIG_DIR, 'netsuite')
 NETSUITE_TOKENS_DIR = Path.joinpath(BASE_CONFIG_DIR, 'tokens')
 PACKAGE_DIR = Path(__file__).parent.resolve()
-NETSUITE_CLIENT_DIR = Path.joinpath(PACKAGE_DIR, 'netsuite_rest_client')
+NETSUITE_CLIENT_DIR = Path.joinpath(BASE_DIR, 'netsuite_rest_client')
 
 if not os.path.exists(NETSUITE_CONFIG_DIR):
     os.makedirs(NETSUITE_CONFIG_DIR)
@@ -73,7 +73,7 @@ DEFAULTS = {
     'JSON_STORAGE_PATH': str(Path.joinpath(NETSUITE_TOKENS_DIR, 'netsuite_tokens.json')),
     'NETSUITE_CERTIFICATE_FILE': str(Path.joinpath(NETSUITE_CONFIG_DIR, 'netsuite_certificate.pem')),
     'NETSUITE_KEY_FILE': str(Path.joinpath(NETSUITE_CONFIG_DIR, 'netsuite_key.pem')),
-    'NETSUITE_CLIENT_PATH': str(Path.joinpath(PACKAGE_DIR, 'netsuite_rest_client')),
+    'NETSUITE_CLIENT_PATH': str(Path.joinpath(BASE_DIR, 'netsuite_rest_client')),
     'APP_NAME': 'default',
 }
 

@@ -1,8 +1,13 @@
 import json
+import os.path
 import pathlib
 import jwt
 from datetime import datetime, timedelta
 from pathlib import Path
+import importlib
+
+import importlib.util
+import netsuite.settings
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
 # from netsuite.swagger_client.restlet_client import RestletClient
@@ -11,20 +16,32 @@ from netsuite.storages import BaseStorage, JSONStorage
 from netsuite import api_clients
 
 
-client_exists = False
-try:
-    import netsuite_rest_client
-    from netsuite_rest_client.api import *
-    client_exists = True
-except ModuleNotFoundError or ImportError as err:
-    print('Rest Client needs to be generated')
+# client_exists = False
+# try:
+#     # base_dir = str(netsuite.settings.NETSUITE_CLIENT_DIR)
+#     api_client  = importlib.util.find_spec('netsuite_rest_client', str(netsuite.settings.NETSUITE_CLIENT_DIR))
+#     if api_client is None:
+#         print("Run 'netsuite generate-rest-client' after getting a token")
+#     else:
+#         netsuite_rest_client = api_client.loader.load_module()
+#     # apis = importlib.import_module('netsuite_rest_client.apis')
+#     # print(apis)
+#
+#     # print(my_module.loader.load_module())
+#     # from base_dir import *
+#     # import netsuite.netsuite_rest_client
+#     # from netsuite.netsuite_rest_client import *
+#     client_exists = True
+# except ModuleNotFoundError or ImportError as err:
+#     print(err)
+#     print('Rest Client needs to be generated')
+
 
 
 class Netsuite:
     app_name: str = None
     storage: BaseStorage = None
     api_settings: APISettings
-    rest_client = None
     query_client = None
     restlet_client = None
 
@@ -70,18 +87,23 @@ class Netsuite:
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
 
-    @property
-    def REST_CLIENT(self):
-        try:
-            if not self.rest_client:
-                if client_exists:
-                    self.rest_client = self.get_rest_client()
-
-                    return self.rest_client
-            else:
-                print('Client needs to be generated.')
-        except Exception as e:
-            print(e)
+    # @property
+    # def REST_CLIENT(self):
+    #     print('ah')
+    #     if not self.rest_client:
+    #         self.rest_client = self.RestClient(self).api_client
+    #     return self.rest_client
+    #     # try:
+    #     #     if not self.rest_client:
+    #     #         if client_exists:
+    #     #             self.rest_client = self.RestClient(self).api_client
+    #     #
+    #     #             self.customer_api = apis.CustomerApi(self.rest_client)
+    #     #             return self.rest_client
+    #     #     else:
+    #     #         print('Client needs to be generated.')
+    #     # except Exception as e:
+    #     #     print(e)
 
 
     @property
@@ -169,7 +191,7 @@ class Netsuite:
         # print(response.json())
         data = {
             'options': {
-                'packageName': 'netsuite_client'
+                'packageName': 'netsuite_rest_client'
             },
             'generateSourceCodeOnly': 'True',
             'spec': response.json()
@@ -194,16 +216,28 @@ class Netsuite:
         file = zipfile.ZipFile(BytesIO(req.content))
         file.extractall(path=self.api_settings.NETSUITE_CLIENT_PATH)
 
-        src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client/netsuite_client')
-        dst = Path(self.api_settings.NETSUITE_CLIENT_PATH)
-        shutil.copytree(src, dst, symlinks=False, ignore=None, ignore_dangling_symlinks=False,
-                        dirs_exist_ok=True)
-        print('Netsuite Rest Client Created')
-        # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
-        # print('temp folder removed.')
 
-        # with open("./client_schema.json", "w") as outfile:
-        #     outfile.write(json.dumps(response.json()))
+        client_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/netsuite_rest_client')
+        class_src = Path.joinpath(Path(netsuite.settings.PACKAGE_DIR), f'netsuite_rest_client/rest_api_client.py')
+        dst = Path(f'{self.api_settings.NETSUITE_CLIENT_PATH}')
+
+        shutil.copytree(client_src, dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
+                        dirs_exist_ok=True)
+
+        shutil.copy(class_src, dst)
+
+        print('Netsuite Rest Client Created')
+        shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
+        print('temp folder removed.')
+
+        print('\n Netsuite is Ready To Go!')
+        print('Usage Example')
+        print('\n ----------------------')
+        print('\nfrom netsuite import Netsuite'
+              '\nfrom netsuite_rest_client import apis, rest_api_client'
+              '\nnetsuite = Netsuite()'
+              '\nrest_client = rest_api_client.RestApiClient(netsuite)'
+              '\ncustomer_api = apis.CustomerApi(rest_client)')
 
     def get_token(self):
         if not self.token.is_expired:
@@ -212,16 +246,28 @@ class Netsuite:
             return self.request_access_token()
 
 
-    def get_rest_client(self):
-        configuration = netsuite_rest_client.configuration.Configuration(
-            host=f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
-        )
+    # def get_rest_client(self):
+    #     configuration = netsuite_rest_client.configuration.Configuration(
+    #         host=f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
+    #     )
+    #
+    #     configuration.api_key['OAuth_1.0_authorization'] = self.get_token().access_token
+    #     configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
+    #     rest_client.api_client = netsuite_rest_client.api_client.ApiClient(configuration=configuration)
+    #     rest_client.customer_api = netsuite_rest_client.api.customer_api.CustomerApi(api_client)
+    #     return rest_client
+    #
+    # class RestClient:
+    #     def __init__(self, netsuite):
+    #         print('ah2')
+    #         self.netsuite = netsuite
+    #         self.configuration = netsuite_rest_client.configuration.Configuration()
+    #         self.configuration.host = f"https://{netsuite.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
+    #         self.configuration.api_key['OAuth_1.0_authorization'] = self.netsuite.get_token().access_token
+    #         self.configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
+    #         self.api_client = netsuite_rest_client.api_client.ApiClient(configuration=self.configuration)
 
-        configuration.api_key['OAuth_1.0_authorization'] = self.get_token().access_token
-        configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
-        rest_client.api_client = netsuite_rest_client.api_client.ApiClient(configuration=configuration)
-        rest_client.customer_api = netsuite_rest_client.api.customer_api.CustomerApi(api_client)
-        return rest_client
+
 
 
     class QueryClient:
@@ -250,9 +296,6 @@ class Netsuite:
             self.api_client = api_clients.ApiClient(configuration=self.configuration)
             self.restlet_api = api_clients.RestletApi(api_client=self.api_client)
 
-            # self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
-            # self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
-            # self.message_api = swagger_client.MessageApi(api_client=self.api_client)
 
         def refresh_token(self):
             self.configuration.token = self.netsuite.get_token()

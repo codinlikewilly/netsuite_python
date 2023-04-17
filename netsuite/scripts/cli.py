@@ -9,7 +9,6 @@ from netsuite.Netsuite import Netsuite
 from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
-from rich import print
 
 def link(uri, label=None):
     if label is None:
@@ -58,7 +57,7 @@ def initialize():
 
     creds = {
         'CLIENT_ID': client_id,
-        'CERT_ID': cert_id,
+        'CERT_ID': certificate_id,
         # 'CLIENT_SECRET': client_secret,
         # 'REDIRECT_URL': redirect_url,
         'NETSUITE_APP_NAME': netsuite_app_name,
