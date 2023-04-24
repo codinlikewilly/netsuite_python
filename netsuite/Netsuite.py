@@ -171,7 +171,20 @@ class Netsuite:
         #     self.get_status_dict()
         return self.token
 
-    def generate_rest_client(self):
+    def get_netsuite_recordtypes(self):
+        url = f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1/metadata-catalog"
+        token = self.storage.get_token(self.app_name)
+        headers = {
+            'Authorization': f'Bearer {token.access_token}'
+        }
+        response = requests.get(url, headers=headers)
+        records = []
+        for item in response.json().get('items'):
+            records.append(item.get("name"))
+        return records
+
+    def generate_rest_client(self, record_types=None):
+
         # from urllib.request import urlopen
         # from tempfile import NamedTemporaryFile
         # from shutil import unpack_archive
@@ -180,7 +193,7 @@ class Netsuite:
         token = self.storage.get_token(self.app_name)
         url = f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1/metadata-catalog"
         params = {
-            'select': 'customer'
+            'select': record_types
         }
         headers = {
             'Accept': 'application/swagger+json',
@@ -227,7 +240,7 @@ class Netsuite:
         shutil.copy(class_src, dst)
 
         print('Netsuite Rest Client Created')
-        shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
+        # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
         print('temp folder removed.')
 
         print('\n Netsuite is Ready To Go!')
@@ -296,6 +309,9 @@ class Netsuite:
             self.api_client = api_clients.ApiClient(configuration=self.configuration)
             self.restlet_api = api_clients.RestletApi(api_client=self.api_client)
 
+            # self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
+            # self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
+            # self.message_api = swagger_client.MessageApi(api_client=self.api_client)
 
         def refresh_token(self):
             self.configuration.token = self.netsuite.get_token()

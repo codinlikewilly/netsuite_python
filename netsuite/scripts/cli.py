@@ -57,7 +57,7 @@ def initialize():
 
     creds = {
         'CLIENT_ID': client_id,
-        'CERT_ID': certificate_id,
+        'CERT_ID': cert_id,
         # 'CLIENT_SECRET': client_secret,
         # 'REDIRECT_URL': redirect_url,
         'NETSUITE_APP_NAME': netsuite_app_name,
@@ -178,7 +178,45 @@ def generate_client_config():
 @cli.command()
 def generate_rest_client():
     netsuite = Netsuite()
-    netsuite.generate_rest_client()
+    display_ns_classes = prompt("Do you need to know which records are available?", type=click.BOOL, default=True)
+    records = netsuite.get_netsuite_recordtypes()
+    if display_ns_classes:
+        display_custom = prompt("Display Custom records (probably not)?", type=click.BOOL, default=False)
+        print("RECORDS")
+        print("-----------------")
+
+        for record in records:
+            if display_custom:
+                print(record)
+            else:
+                if "customrecord" not in record and "customlist" not in record:
+                    print(record)
+    records_added = True
+    ns_records_to_include = ["customer"]
+    while records_added:
+        next_record = prompt("Which records do you need?")
+        if next_record not in records:
+            print("That record is not available.")
+        elif next_record in ns_records_to_include:
+            print("record already included.")
+        else:
+            ns_records_to_include.append(next_record)
+        records_added = prompt("Add another?", type=click.BOOL, default=True)
+
+    record_str = ''
+    index = 0
+    for record in ns_records_to_include:
+        if index > 0:
+            record_str += f',{record}'
+        else:
+            record_str += f'{record}'
+        index += 1
+
+
+    # ns_records_to_include = prompt("Which records will you be using (comma separated list, no spaces)", type=click.STRING, default="customer")
+        # print(netsuite.get_netsuite_recordtypes())
+    print(record_str)
+    netsuite.generate_rest_client(record_types=record_str)
 
 @cli.command()
 @click.option('--credentials-file', '--f', type=click.File('r'), default=api_settings.CREDENTIALS_PATH,
