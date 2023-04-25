@@ -163,10 +163,10 @@ def generate_netsuite_client_config():
     # redirect_url = prompt("Redirect URL", default=api_settings.REDIRECT_URL)
     netsuite_app_name = prompt("What is the netsuite application name (Portion before app.netsuite.com)?", hide_input=False)
     app_name = prompt("App Name (for token storage)", default=api_settings.APP_NAME)
-    storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
-                           type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
-                           show_choices=True)
-    print('\n')
+    # storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
+    #                        type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
+    #                        show_choices=True)
+    storage_class = api_settings.defaults.get('STORAGE_CLASS')
 
     creds = {
         'CLIENT_ID': client_id,
@@ -188,7 +188,7 @@ def generate_netsuite_client_config():
     with open(api_settings.CREDENTIALS_PATH, 'w') as f:
         creds_json = json.dumps(creds, indent=4)
         f.write(creds_json)
-        print(f" Netsuite Credentials path: {api_settings.CREDENTIALS_PATH} ")
+        print(f"Netsuite Credentials path: {api_settings.CREDENTIALS_PATH} ")
     print("\n ----- Configuration Generated -----")
 
 
