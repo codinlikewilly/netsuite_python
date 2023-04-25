@@ -221,14 +221,18 @@ def generate_netsuite_rest_client():
     add_more_records = True
     ns_records_to_include = []
     while add_more_records:
-        next_record = prompt("Which records do you need?")
-        if next_record not in records:
-            print("That record is not available.")
-        elif next_record in ns_records_to_include:
-            print("record already included.")
+        next_record = prompt("Which records do you need?", default='')
+        if next_record == '':
+            if prompt("Skip this step and use default (customer)?", type=click.BOOL, default=False):
+                break
         else:
-            ns_records_to_include.append(next_record)
-            print(f"Record Added: {next_record}")
+            if next_record not in records:
+                print("That record is not available.")
+            elif next_record in ns_records_to_include:
+                print("record already included.")
+            else:
+                 ns_records_to_include.append(next_record)
+                 print(f"Record Added: {next_record}")
         add_more_records = prompt("Add another?", type=click.BOOL, default='yes', show_choices=True)
 
 

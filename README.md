@@ -16,7 +16,7 @@ This library makes it easy to set up a Netsuite authorization without needing a 
 
 ### Prerequisite  Setup ###
     1. Enable Services
-        * Rest Web Services
+        * Restlets
         * Rest Web Services
         * Rest Web Services
         * Rest Web Services
@@ -30,10 +30,14 @@ This library makes it easy to set up a Netsuite authorization without needing a 
         * SuiteScript
         * User Access Tokens	
     3. Create an integration record 
-        * Check Client Credentials ( MAchine to Machine Grant) 
+        * Check Client Credentials ( MAchine to Machine Grant)
+        * Under Scope Select 
+            * Restlets
+            * Rest Web Services
         * STORE THE CLIENT ID 
 
 
+ ### Setup The Easy Way  ###
 run ``` netsuite initialize ```
 
  #### Notes ####
@@ -48,6 +52,8 @@ run ``` netsuite initialize ```
         * A Certificate can be generated once you register the package with CLI with 'netsuite generate-certificate' 
         * Cert ID is available under Setup -> Integration -> OAuth 2.0 Client Credentials once the certificate is uploaded.
 
+## Setup the hard way ##
+
 ## Generating x509 certificate for Netsuite ###
  * Run `netsuite generate-certificate`
    * Domain: theapiguys.com
@@ -58,7 +64,7 @@ run ``` netsuite initialize ```
    * Country: US
    * Email: will@theapiguys.com
  
- * It will ask for the file name that you wish to save the key to. This will be used when entering the creds.
+ * It will store the cert in a file in the root of the project under config/netsuite
 
 ## Uploading x509 certificate to Netsuite ##
 * On Client's Netsuite top ribbon go to `Setup -> Integration -> OAuth 2.0 Client Credentials`
@@ -66,7 +72,7 @@ run ``` netsuite initialize ```
     * Entity: The User created for TAG
     * ROLE: Role created for this integration
     * Application: Application Created for this integration
-    * Certificate: Click "Choose A File" and upload the PUBLIC Cert (NOT PRIVATE KEY)
+    * Certificate: Click "Choose A File" and upload the PUBLIC Cert (called netsuite-certificate.pem by default)
 * Copy the Certificate ID
 
 ## Generate Netsuite Client ##

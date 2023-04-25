@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: netsuite-python
-Version: 1.5.1
+Version: 1.5.2
 Summary: Python SDK for Netsuite API with Flask Integration
 Home-page: https://bitbucket.org/theapiguys/netsuite_python
 Author: Will @ TheAPIGuys
