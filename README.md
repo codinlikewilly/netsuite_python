@@ -12,13 +12,11 @@ This library makes it easy to set up a Netsuite authorization without needing a 
   * Activate your virtual environment
   * `netsuite = python venv/bin/keap`
 
-## QUICK START ##
+# QUICK START #
 
-### Prerequisite  Setup ###
+## Prerequisite  Setup ##
     1. Enable Services
         * Restlets
-        * Rest Web Services
-        * Rest Web Services
         * Rest Web Services
     2. Create a role for the integration with the following permissions:
         * Access Token Management
@@ -37,14 +35,14 @@ This library makes it easy to set up a Netsuite authorization without needing a 
         * STORE THE CLIENT ID 
 
 
- ### Setup The Easy Way  ###
+## Setup The Easy Way  ##
 run ``` netsuite initialize ```
 * Follow the prompts
 
 * Docs will be located in the generated "netsuite_rest_client folder" at the rot of the project
 
 #### Usage ####
-```
+```python
 # import Netsuite Package
 from netsuite import Netsuite
 # import the generated Client
@@ -61,7 +59,7 @@ customer_api = apis.CustomerApi(rest_client)
 
 ```
 
- #### Notes ####
+#### Notes ####
   * Requirements
     * Sandbox requires the same setup as Prod, it DOES NOT copy over
     * An administrator for the Netsuite app to follow the steps [here](https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157771281570.html)
@@ -84,9 +82,23 @@ body_params = {"searchID": 'customsearch184275'}
 print(restlet_client.execute_restlet(script=1999, deploy=1, body_params=body))
 ```
 
+## Regenerating the API Client with more records types
+re-run ```netsuite generate-rest-client```
+* when asked about using more record types, choose option that lets you set them
+* pick record types from the list
+* complete prompts
+
+## Uploading x509 certificate to Netsuite ##
+* On Client's Netsuite top ribbon go to `Setup -> Integration -> OAuth 2.0 Client Credentials`
+* Click `Create-New` button
+    * Entity: The User created for TAG
+    * ROLE: Role created for this integration
+    * Application: Application Created for this integration
+    * Certificate: Click "Choose A File" and upload the PUBLIC Cert (called netsuite-certificate.pem by default)
+* Copy the Certificate ID
 
 
-## Setup the hard way ##
+# Other Commands #
 
 ## Generating x509 certificate for Netsuite ###
  * Run `netsuite generate-certificate`
@@ -100,29 +112,14 @@ print(restlet_client.execute_restlet(script=1999, deploy=1, body_params=body))
  
  * It will store the cert in a file in the root of the project under config/netsuite
 
-## Uploading x509 certificate to Netsuite ##
-* On Client's Netsuite top ribbon go to `Setup -> Integration -> OAuth 2.0 Client Credentials`
-* Click `Create-New` button
-    * Entity: The User created for TAG
-    * ROLE: Role created for this integration
-    * Application: Application Created for this integration
-    * Certificate: Click "Choose A File" and upload the PUBLIC Cert (called netsuite-certificate.pem by default)
-* Copy the Certificate ID
 
-## Generate Netsuite Client ##
-* Run command to generate sdk using openapi 3.0 
-* method is generate_swagger_client
-* visit link returned from method and download result 
-* unzip the file and copy the "netsuite_client" folder from the directory into the projects root folder
 ## Setting up Netsuite SDK in a project ##
 * Run `netsuite generate-client-config`
     * It will ask you for information obtained above: You can use all the defaults
         * Client ID
         * Netsuite Certificate ID
         * Netsuite Key File
-        * Netsuite Application Name
-        * Allow None
-        * Use Datetime
+        * Netsuite Application Name 
         * Storage Class
       
     * If you want to save to file
@@ -139,25 +136,4 @@ print(restlet_client.execute_restlet(script=1999, deploy=1, body_params=body))
 * That's it! You should now have a valid token to use with the Netsuite API.
 
 
-## Usage ##
 
-
-It is pretty simple to get started using the SDK once you have a valid token.
-
-### Setup Netsuite ###
-```
-from netsuite import Netsuite
-import netsuite_client
-from netsuite_client.api.customer_api import CustomerApi
-
-netsuite = Netsuite(config_file=settings.NS_CREDENTIALS_PATH)
-
-customer_api = CustomerApi(netsuite.REST_CLIENT)
-
-print(customer_api.customer_id_get(id=1617260))
-```
-
-## Example Usage ##
- ```
- print(ns_contact_api.contact_id_get(id=1413220))
- ```
