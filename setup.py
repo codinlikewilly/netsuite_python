@@ -5,8 +5,8 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='netsuite_python',
-    version='1.4.1',
-    description='Python SDK for Netsuite API with Django Integration',
+    version='1.5.1',
+    description='Python SDK for Netsuite API with Flask Integration',
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://bitbucket.org/theapiguys/netsuite_python',
@@ -19,7 +19,7 @@ setup(
         'Click',
         'requests',
         'PyJWT',
-        "urllib3 >= 1.15",
+        "urllib3 >= 1.25.3",
         "six >= 1.10",
         "certifi",
         "python-dateutil",

@@ -13,6 +13,8 @@ netsuite/api_clients/rest.py
 netsuite/api_clients/api/__init__.py
 netsuite/api_clients/api/query_api.py
 netsuite/api_clients/api/restlet_api.py
+netsuite/netsuite_rest_client/__init__.py
+netsuite/netsuite_rest_client/rest_api_client.py
 netsuite/scripts/__init__.py
 netsuite/scripts/cli.py
 netsuite/storages/BaseStorage.py

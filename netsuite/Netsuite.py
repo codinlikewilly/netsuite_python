@@ -87,24 +87,6 @@ class Netsuite:
                         f"/record/v1/ "
         self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
 
-    # @property
-    # def REST_CLIENT(self):
-    #     print('ah')
-    #     if not self.rest_client:
-    #         self.rest_client = self.RestClient(self).api_client
-    #     return self.rest_client
-    #     # try:
-    #     #     if not self.rest_client:
-    #     #         if client_exists:
-    #     #             self.rest_client = self.RestClient(self).api_client
-    #     #
-    #     #             self.customer_api = apis.CustomerApi(self.rest_client)
-    #     #             return self.rest_client
-    #     #     else:
-    #     #         print('Client needs to be generated.')
-    #     # except Exception as e:
-    #     #     print(e)
-
 
     @property
     def QUERY_CLIENT(self):
@@ -181,9 +163,11 @@ class Netsuite:
         records = []
         for item in response.json().get('items'):
             records.append(item.get("name"))
-        return records
+        return sorted(records)
 
     def generate_rest_client(self, record_types=None):
+
+        print("\nGenerating Client....")
 
         # from urllib.request import urlopen
         # from tempfile import NamedTemporaryFile
@@ -213,7 +197,6 @@ class Netsuite:
             'Content-Type': 'application/json'
         }
         result = requests.post('https://api-latest-master.openapi-generator.tech/api/gen/clients/python',headers=headers2, json=data)
-        print(result.json())
 
         # Defining the zip file URL
         url = result.json().get('link')
@@ -222,31 +205,37 @@ class Netsuite:
         filename = url.split('/')[-1]
 
         # Downloading the file by sending the request to the URL
+        print('Downloading Generated Client....')
         req = requests.get(url)
-        print('Downloading Completed')
+        print('Client Downloaded.')
 
         # extracting the zip file contents
+        print('Extracting....')
         file = zipfile.ZipFile(BytesIO(req.content))
         file.extractall(path=self.api_settings.NETSUITE_CLIENT_PATH)
 
 
         client_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/netsuite_rest_client')
         class_src = Path.joinpath(Path(netsuite.settings.PACKAGE_DIR), f'netsuite_rest_client/rest_api_client.py')
-        dst = Path(f'{self.api_settings.NETSUITE_CLIENT_PATH}')
+        docs_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/docs')
 
+        dst = Path(f'{self.api_settings.NETSUITE_CLIENT_PATH}')
+        print(f'Copying to: {dst}')
         shutil.copytree(client_src, dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
+                        dirs_exist_ok=True)
+        shutil.copytree(docs_src, dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
                         dirs_exist_ok=True)
 
         shutil.copy(class_src, dst)
 
-        print('Netsuite Rest Client Created')
         # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
-        print('temp folder removed.')
+        print('temp folder was removed.')
 
-        print('\n Netsuite is Ready To Go!')
-        print('Usage Example')
-        print('\n ----------------------')
-        print('\nfrom netsuite import Netsuite'
+        print('\nNetsuite client was successfully generated and is ready to use!')
+        print('***************************************************************')
+        print('\nUSAGE')
+        print('----------------------')
+        print('from netsuite import Netsuite'
               '\nfrom netsuite_rest_client import apis, rest_api_client'
               '\nnetsuite = Netsuite()'
               '\nrest_client = rest_api_client.RestApiClient(netsuite)'
@@ -257,30 +246,6 @@ class Netsuite:
             return self.token
         else:
             return self.request_access_token()
-
-
-    # def get_rest_client(self):
-    #     configuration = netsuite_rest_client.configuration.Configuration(
-    #         host=f"https://{self.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
-    #     )
-    #
-    #     configuration.api_key['OAuth_1.0_authorization'] = self.get_token().access_token
-    #     configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
-    #     rest_client.api_client = netsuite_rest_client.api_client.ApiClient(configuration=configuration)
-    #     rest_client.customer_api = netsuite_rest_client.api.customer_api.CustomerApi(api_client)
-    #     return rest_client
-    #
-    # class RestClient:
-    #     def __init__(self, netsuite):
-    #         print('ah2')
-    #         self.netsuite = netsuite
-    #         self.configuration = netsuite_rest_client.configuration.Configuration()
-    #         self.configuration.host = f"https://{netsuite.netsuite_app_name}.suitetalk.api.netsuite.com/services/rest/record/v1"
-    #         self.configuration.api_key['OAuth_1.0_authorization'] = self.netsuite.get_token().access_token
-    #         self.configuration.api_key_prefix['OAuth_1.0_authorization'] = 'Bearer'
-    #         self.api_client = netsuite_rest_client.api_client.ApiClient(configuration=self.configuration)
-
-
 
 
     class QueryClient:
@@ -316,28 +281,3 @@ class Netsuite:
         def refresh_token(self):
             self.configuration.token = self.netsuite.get_token()
             return self.configuration.token
-
-    # def get_status_dict(self):
-    #     if self.token.access_token is None:
-    #         return None
-    #     if self.status_dict is None:
-    #         query = "SELECT * FROM EntityStatus WHERE inactive = 'F'"
-    #         statuses = self.QUERY_CLIENT.query_api.execute_query(query=query)
-    #         status_dict = {}
-    #         for status in statuses:
-    #             status_dict[f"{status.get('entitytype').upper()}-{status.get('name').upper()}"] = status.get('key')
-    #         self.status_dict = status_dict
-    #
-    #     return self.status_dict
-    #
-    # def get_customer_categories(self):
-    #     if self.token.access_token is None:
-    #         return None
-    #     if self.categories is None:
-    #         query = "SELECT * FROM customercategory WHERE isinactive = 'F'"
-    #         categories = self.QUERY_CLIENT.query_api.execute_query(query=query)
-    #         category_dict = {}
-    #         for category in categories:
-    #             category_dict[f"{category.get('name').upper()}"] = category.get('id')
-    #             self.categories = category_dict
-    #     return self.categories

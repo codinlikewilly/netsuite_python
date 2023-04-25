@@ -6,7 +6,7 @@ from click import prompt
 from pathlib import Path
 
 from netsuite.Netsuite import Netsuite
-from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
+from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE, BASE_DIR, BASE_CONFIG_DIR
 from OpenSSL.SSL import FILETYPE_PEM
 from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
 
@@ -29,52 +29,49 @@ def cli():
 
 @cli.command()
 def initialize():
-    steps_completed = False
-    while not steps_completed:
-        steps_completed = prompt(f"Have you created the integration record by following the steps in the README?", default='y', type=click.BOOL, show_choices=True)
-        if steps_completed:
-            client_id = prompt("Client Id", hide_input=False)
-        else:
-            print('Read it and do the steps hoe https://bitbucket.org/theapiguys/netsuite_python/src/master/')
 
-    print("Generate Certificate", )
-    certificate_uploaded = False
-    while not certificate_uploaded:
-        certificate_uploaded = prompt(f"Have you generated a certificate?", default='y', type=click.BOOL, show_choices=True)
-        if certificate_uploaded:
-            certificate_id = prompt("Certificate ID: ", hide_input=False)
-        else:
-            generate_certificate()
+    generate_netsuite_client_config()
+    # netsuite_app_name = prompt("What is the netsuite application name? (Portion before app.netsuite.com)", hide_input=False)
+    #
+    # app_name = prompt("App Name", default=api_settings.APP_NAME)
+    # allow_none = prompt("Allow None", default=api_settings.ALLOW_NONE)
+    # use_datetime = prompt("Use Datetime", default=api_settings.USE_DATETIME)
+    # storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
+    #                        type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
+    #                        show_choices=True)
+    #
+    # creds = {
+    #     'CLIENT_ID': client_id,
+    #     'CERT_ID': cert_id,
+    #     # 'CLIENT_SECRET': client_secret,
+    #     # 'REDIRECT_URL': redirect_url,
+    #     'NETSUITE_APP_NAME': netsuite_app_name,
+    #     'APP_NAME': app_name,
+    #     'ALLOW_NONE': allow_none,
+    #     'USE_DATETIME': use_datetime,
+    #     'STORAGE_CLASS': storage_class,
+    # }
+    #
+    # if storage_class == JSON_STORAGE:
+    #     creds['JSON_STORAGE_PATH'] = prompt("Token Storage File", default=api_settings.JSON_STORAGE_PATH,
+    #                                         type=click.Path(readable=True, writable=True))
+    #
+    # with open(api_settings.CREDENTIALS_PATH, 'w') as f:
+    #     creds_json = json.dumps(creds, indent=4)
+    #     f.write(creds_json)
+    #     print(f"Netsuite Credentials written to: {api_settings.CREDENTIALS_PATH}")
 
-    netsuite_app_name = prompt("What is the netsuite application name? (Portion before app.netsuite.com)", hide_input=False)
+    print("\n Generating Access Token....\n")
+    netsuite = Netsuite()
+    netsuite.request_access_token()
 
-    app_name = prompt("App Name", default=api_settings.APP_NAME)
-    allow_none = prompt("Allow None", default=api_settings.ALLOW_NONE)
-    use_datetime = prompt("Use Datetime", default=api_settings.USE_DATETIME)
-    storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
-                           type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
-                           show_choices=True)
+    if netsuite.token.access_token is None:
+        print("Unable to get the access token")
+        return
 
-    creds = {
-        'CLIENT_ID': client_id,
-        'CERT_ID': cert_id,
-        # 'CLIENT_SECRET': client_secret,
-        # 'REDIRECT_URL': redirect_url,
-        'NETSUITE_APP_NAME': netsuite_app_name,
-        'APP_NAME': app_name,
-        'ALLOW_NONE': allow_none,
-        'USE_DATETIME': use_datetime,
-        'STORAGE_CLASS': storage_class,
-    }
+    generate_netsuite_rest_client()
 
-    if storage_class == JSON_STORAGE:
-        creds['JSON_STORAGE_PATH'] = prompt("Token Storage File", default=api_settings.JSON_STORAGE_PATH,
-                                            type=click.Path(readable=True, writable=True))
 
-    with open(api_settings.CREDENTIALS_PATH, 'w') as f:
-        creds_json = json.dumps(creds, indent=4)
-        f.write(creds_json)
-        print(f"Netsuite Credentials written to: {api_settings.CREDENTIALS_PATH}")
 
 
 
@@ -82,8 +79,11 @@ def initialize():
 
 @cli.command()
 def generate_certificate():
+    generate_netsuite_certificate()
 
-    print(f"BASE DIR: {api_settings.BASE_DIR}")
+def generate_netsuite_certificate():
+
+    print(f"BASE DIR: {BASE_DIR}")
 
     CN = prompt("Domain", hide_input=False)
     ORG = prompt("Organization", hide_input=False)
@@ -135,17 +135,38 @@ def generate_certificate():
 
 @cli.command()
 def generate_client_config():
-    client_id = prompt("What is your client id?", hide_input=False)
-    cert_id = prompt("What is your Netsuite certificate id?", hide_input=False)
+    generate_netsuite_client_config()
+
+def generate_netsuite_client_config():
+    print("****************************")
+    print("  GENERATE NETSUITE CONFIG")
+    print("****************************")
+    steps_completed = False
+    while not steps_completed:
+        steps_completed = prompt(f"Have you created the integration record by following the steps in the README?", default='y', type=click.BOOL, show_choices=True)
+        if steps_completed:
+            client_id = prompt("Client Id", hide_input=False)
+        else:
+            print('Read it and do the steps hoe https://bitbucket.org/theapiguys/netsuite_python/src/master/')
+
+    print("\n --- Certificate Configuration --- \n ")
+    certificate_uploaded = False
+    while not certificate_uploaded:
+        certificate_uploaded = prompt(f"Have you generated a certificate and uploaded it to Netsuite?", default='n', type=click.BOOL, show_choices=True)
+        if certificate_uploaded:
+            cert_id = prompt("Certificate ID: ", hide_input=False)
+        else:
+            generate_netsuite_certificate()
+
+    print("\n --- Certificate has been Configured --- \n ")
     # client_secret = prompt("What is your client secret?", hide_input=True)
     # redirect_url = prompt("Redirect URL", default=api_settings.REDIRECT_URL)
-    netsuite_app_name = prompt("What is the netsuite application name?", hide_input=False)
-    app_name = prompt("App Name", default=api_settings.APP_NAME)
-    allow_none = prompt("Allow None", default=api_settings.ALLOW_NONE)
-    use_datetime = prompt("Use Datetime", default=api_settings.USE_DATETIME)
+    netsuite_app_name = prompt("What is the netsuite application name (Portion before app.netsuite.com)?", hide_input=False)
+    app_name = prompt("App Name (for token storage)", default=api_settings.APP_NAME)
     storage_class = prompt("Storage Class", default=api_settings.defaults.get('STORAGE_CLASS'),
                            type=click.Choice(api_settings.defaults.get('DEFAULT_STORAGE_CLASSES')),
                            show_choices=True)
+    print('\n')
 
     creds = {
         'CLIENT_ID': client_id,
@@ -154,8 +175,8 @@ def generate_client_config():
         # 'REDIRECT_URL': redirect_url,
         'NETSUITE_APP_NAME': netsuite_app_name,
         'APP_NAME': app_name,
-        'ALLOW_NONE': allow_none,
-        'USE_DATETIME': use_datetime,
+        'ALLOW_NONE': api_settings.ALLOW_NONE,
+        'USE_DATETIME': api_settings.USE_DATETIME,
         'STORAGE_CLASS': storage_class,
     }
 
@@ -163,37 +184,43 @@ def generate_client_config():
         creds['JSON_STORAGE_PATH'] = prompt("Token Storage File", default=api_settings.JSON_STORAGE_PATH,
                                             type=click.Path(readable=True, writable=True))
 
-    save_to_file = prompt("Save settings to file?", default='y', type=click.BOOL, show_choices=True)
 
-    if save_to_file:
-        with open(api_settings.CREDENTIALS_PATH, 'w') as f:
-            creds_json = json.dumps(creds, indent=4)
-            f.write(creds_json)
-            print(f"Netsuite Credentials written to: {api_settings.CREDENTIALS_PATH}")
-    else:
-        click.echo(creds)
+    with open(api_settings.CREDENTIALS_PATH, 'w') as f:
+        creds_json = json.dumps(creds, indent=4)
+        f.write(creds_json)
+        print(f" Netsuite Credentials path: {api_settings.CREDENTIALS_PATH} ")
+    print("\n ----- Configuration Generated -----")
+
+
 
     return creds
 
 @cli.command()
 def generate_rest_client():
+    generate_netsuite_rest_client()
+
+def generate_netsuite_rest_client():
+    print (" ----- Rest Client Generator -----")
     netsuite = Netsuite()
-    display_ns_classes = prompt("Do you need to know which records are available?", type=click.BOOL, default=True)
+    display_ns_classes = prompt("List available Netsuite Records?", type=click.BOOL, default=True)
+    print("")
     records = netsuite.get_netsuite_recordtypes()
     if display_ns_classes:
         display_custom = prompt("Display Custom records (probably not)?", type=click.BOOL, default=False)
-        print("RECORDS")
-        print("-----------------")
-
-        for record in records:
-            if display_custom:
+        print("\n   RECORDS")
+        print("-------------------")
+        if display_custom:
+            for record in records:
                 print(record)
-            else:
+        else:
+            for record in records:
                 if "customrecord" not in record and "customlist" not in record:
                     print(record)
-    records_added = True
-    ns_records_to_include = ["customer"]
-    while records_added:
+
+    print("\n")
+    add_more_records = True
+    ns_records_to_include = []
+    while add_more_records:
         next_record = prompt("Which records do you need?")
         if next_record not in records:
             print("That record is not available.")
@@ -201,22 +228,23 @@ def generate_rest_client():
             print("record already included.")
         else:
             ns_records_to_include.append(next_record)
-        records_added = prompt("Add another?", type=click.BOOL, default=True)
-
-    record_str = ''
-    index = 0
-    for record in ns_records_to_include:
-        if index > 0:
-            record_str += f',{record}'
-        else:
-            record_str += f'{record}'
-        index += 1
+            print(f"Record Added: {next_record}")
+        add_more_records = prompt("Add another?", type=click.BOOL, default='yes', show_choices=True)
 
 
-    # ns_records_to_include = prompt("Which records will you be using (comma separated list, no spaces)", type=click.STRING, default="customer")
-        # print(netsuite.get_netsuite_recordtypes())
-    print(record_str)
+    if len(ns_records_to_include) >> 0:
+        record_str = ''
+        index = 0
+        for record in ns_records_to_include:
+            if index == 0:
+                record_str += f'{record}'
+            else:
+                record_str += f',{record}'
+    else:
+        record_str = 'customer'
+
     netsuite.generate_rest_client(record_types=record_str)
+
 
 @cli.command()
 @click.option('--credentials-file', '--f', type=click.File('r'), default=api_settings.CREDENTIALS_PATH,
