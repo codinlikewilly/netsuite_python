@@ -232,7 +232,7 @@ class Netsuite:
         shutil.copy(readme_src, dst)
 
 
-        # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
+        shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
         print('temp folder was removed.')
 
         print('\nNetsuite client was successfully generated and is ready to use!')
