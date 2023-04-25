@@ -49,12 +49,15 @@ run ``` netsuite initialize ```
 from netsuite import Netsuite
 # import the generated Client
 from netsuite_rest_client import apis, rest_api_client
+# import models
+from netsuite_rest_client.model.customer import Customer
 # instantiate the SDK
 netsuite = Netsuite()
 # Instantiate the generated Client
 rest_client = rest_api_client.RestApiClient(netsuite)
 # Instantiate the generated API endpoints using the generated client
 customer_api = apis.CustomerApi(rest_client)
+
 
 ```
 
@@ -69,6 +72,19 @@ customer_api = apis.CustomerApi(rest_client)
       * Certificate ID
         * A Certificate can be generated once you register the package with CLI with 'netsuite generate-certificate' 
         * Cert ID is available under Setup -> Integration -> OAuth 2.0 Client Credentials once the certificate is uploaded.
+
+## Use Restlets ##
+saved search example ref: https://timdietrich.me/blog/netsuite-saved-search-api/
+```python
+# import restlet client
+restlet_client = netsuite.RESTLET_CLIENT.restlet_api
+# create body params 
+body_params = {"searchID": 'customsearch184275'}
+# call restlet
+print(restlet_client.execute_restlet(script=1999, deploy=1, body_params=body))
+```
+
+
 
 ## Setup the hard way ##
 
