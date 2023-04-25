@@ -200,40 +200,44 @@ def generate_rest_client():
     generate_netsuite_rest_client()
 
 def generate_netsuite_rest_client():
+    ns_records_to_include = []
     print (" ----- Rest Client Generator -----")
     netsuite = Netsuite()
-    display_ns_classes = prompt("List available Netsuite Records?", type=click.BOOL, default=True)
-    print("")
-    records = netsuite.get_netsuite_recordtypes()
-    if display_ns_classes:
-        display_custom = prompt("Display Custom records (probably not)?", type=click.BOOL, default=False)
-        print("\n   RECORDS")
-        print("-------------------")
-        if display_custom:
-            for record in records:
-                print(record)
-        else:
-            for record in records:
-                if "customrecord" not in record and "customlist" not in record:
-                    print(record)
+    needs_other_recordtypes = prompt("Will you be using record types other than customer?", type=click.BOOL, default=True)
 
-    print("\n")
-    add_more_records = True
-    ns_records_to_include = []
-    while add_more_records:
-        next_record = prompt("Which records do you need?", default='')
-        if next_record == '':
-            if prompt("Skip this step and use default (customer)?", type=click.BOOL, default=False):
-                break
-        else:
-            if next_record not in records:
-                print("That record is not available.")
-            elif next_record in ns_records_to_include:
-                print("record already included.")
+
+    if needs_other_recordtypes:
+        display_ns_classes = prompt("List available Netsuite Records?", type=click.BOOL, default=True)
+        print("")
+        records = netsuite.get_netsuite_recordtypes()
+        if display_ns_classes:
+            display_custom = prompt("Display Custom records (probably not)?", type=click.BOOL, default=False)
+            print("\n   RECORDS")
+            print("-------------------")
+            if display_custom:
+                for record in records:
+                    print(record)
             else:
-                 ns_records_to_include.append(next_record)
-                 print(f"Record Added: {next_record}")
-        add_more_records = prompt("Add another?", type=click.BOOL, default='yes', show_choices=True)
+                for record in records:
+                    if "customrecord" not in record and "customlist" not in record:
+                        print(record)
+
+        print("\n")
+        add_more_records = True
+        while add_more_records:
+            next_record = prompt("Which records do you need?", default='')
+            if next_record == '':
+                if prompt("Skip this step and use default (customer)?", type=click.BOOL, default=False):
+                    break
+            else:
+                if next_record not in records:
+                    print("That record is not available.")
+                elif next_record in ns_records_to_include:
+                    print("record already included.")
+                else:
+                     ns_records_to_include.append(next_record)
+                     print(f"Record Added: {next_record}")
+            add_more_records = prompt("Add another?", type=click.BOOL, default='yes', show_choices=True)
 
 
     if len(ns_records_to_include) >> 0:

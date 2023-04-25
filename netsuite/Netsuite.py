@@ -218,15 +218,19 @@ class Netsuite:
         client_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/netsuite_rest_client')
         class_src = Path.joinpath(Path(netsuite.settings.PACKAGE_DIR), f'netsuite_rest_client/rest_api_client.py')
         docs_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/docs')
+        readme_src = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'python-client/README.md')
 
         dst = Path(f'{self.api_settings.NETSUITE_CLIENT_PATH}')
+        docs_dst = Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), f'docs')
         print(f'Copying to: {dst}')
         shutil.copytree(client_src, dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
                         dirs_exist_ok=True)
-        shutil.copytree(docs_src, dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
+        shutil.copytree(docs_src, docs_dst, symlinks=True, ignore=None, ignore_dangling_symlinks=False,
                         dirs_exist_ok=True)
 
         shutil.copy(class_src, dst)
+        shutil.copy(readme_src, dst)
+
 
         # shutil.rmtree(Path.joinpath(Path(self.api_settings.NETSUITE_CLIENT_PATH), 'python-client'))
         print('temp folder was removed.')
