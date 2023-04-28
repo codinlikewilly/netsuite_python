@@ -138,6 +138,19 @@ def generate_client_config():
     generate_netsuite_client_config()
 
 def generate_netsuite_client_config():
+    try:
+        netsuite = Netsuite()
+        if netsuite.api_settings.CLIENT_ID is not None:
+            from pprint import pprint
+            print("Netsuite Credentials Found.")
+            print("     CURRENT CONFIG")
+            print("-------------------------")
+            pprint(netsuite.api_settings.__dict__.get('_user_settings'), indent=4)
+            print("\n")
+            if prompt("Keep settings?", type=click.BOOL, default=True):
+                return
+    except Exception:
+        print("")
     print("****************************")
     print("  GENERATE NETSUITE CONFIG")
     print("****************************")
