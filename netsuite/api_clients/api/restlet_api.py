@@ -23,7 +23,7 @@ class RestletApi(object):
             api_client = ApiClient()
         self.api_client = api_client
 
-    def execute_restlet(self, body_params, **kwargs):
+    def execute_restlet(self, path_params, body_params, method='POST', **kwargs):
         all_params = ['script', 'deploy']  # noqa: E501
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
@@ -34,7 +34,11 @@ class RestletApi(object):
                 )
             params[key] = val
         del params['kwargs']
-        path_params = {}
+
+        if path_params is not None:
+            path_params = path_params
+        else:
+            path_params = {}
 
         if 'script' in params:
             path_params['script'] = params['script']
@@ -46,11 +50,10 @@ class RestletApi(object):
         else:
             path_params['deploy'] = '1'
 
-
         # Authentication setting
         auth_settings = ['oAuth2ClientCredentials']
         response = self.api_client.call_api('',
-                                            'POST',
+                                            method,
                                             query_params=path_params,
                                             _preload_content=False,
                                             _return_http_data_only=True,
@@ -58,12 +61,17 @@ class RestletApi(object):
                                             body=body_params)
         if hasattr(response, 'data'):
             if isinstance(response.data, bytes):
-                response = json.loads(response.data.decode('UTF-8'))
-                if 'results' in response:
-                    if type(response.get("results")) is list:
-                        return response.get("results")
-                    else:
-                        items = [response.get("results")]
-                        return items
-
+                response = response.data.decode('utf8')
+                try:
+                    response = json.loads(response)
+                    if 'results' in response:
+                        if type(response.get("results")) is list:
+                            return response.get("results")
+                        else:
+                            items = [response.get("results")]
+                            return items
+                except ValueError:
+                    pass
+                except TypeError:
+                    pass
         return response
