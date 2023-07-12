@@ -31,7 +31,10 @@ try:
 except ImportError as e:
     settings = None
 
-BASE_DIR = Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
+if os.environ.get('BASE_DIR')is not None:
+    BASE_DIR = Path(os.environ.get('BASE_DIR'))
+else:
+    BASE_DIR = Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
 BASE_CONFIG_DIR = Path.joinpath(BASE_DIR, 'config')
 NETSUITE_CONFIG_DIR = Path.joinpath(BASE_CONFIG_DIR, 'netsuite')
 NETSUITE_TOKENS_DIR = Path.joinpath(BASE_CONFIG_DIR, 'tokens')
