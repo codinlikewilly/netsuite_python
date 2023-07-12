@@ -19,6 +19,7 @@ This library makes it easy to set up a Netsuite authorization without needing a 
     1. Enable Services
         * Restlets
         * Rest Web Services
+        * OAUTH 2.0
     2. Create a role for the integration with the following permissions:
         * Access Token Management
         * Log in using Access Tokens	
@@ -34,6 +35,9 @@ This library makes it easy to set up a Netsuite authorization without needing a 
             * Restlets
             * Rest Web Services
         * STORE THE CLIENT ID 
+    4. Create and upload the certificate
+        * with dev environment setup, run ```netsuite generate-certificate```
+        * upload the public cert to Netsuite under Setup -> Integrations -> Manage Oauth 2.0
 
 
 ## Setup The Easy Way  ##
