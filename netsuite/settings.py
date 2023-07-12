@@ -14,7 +14,10 @@ back to the defaults.
 """
 from .module_loading import import_string
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 django_imported = False
 try:
@@ -36,8 +39,15 @@ if os.environ.get('BASE_DIR')is not None:
 else:
     BASE_DIR = Path(__file__).parent.parent.parent.parent.parent.parent.resolve()
 BASE_CONFIG_DIR = Path.joinpath(BASE_DIR, 'config')
-NETSUITE_CONFIG_DIR = Path.joinpath(BASE_CONFIG_DIR, 'netsuite')
-NETSUITE_TOKENS_DIR = Path.joinpath(BASE_CONFIG_DIR, 'tokens')
+if os.environ.get("NETSUITE_CONFIG_DIR") is not None:
+    NETSUITE_CONFIG_DIR = Path(os.environ.get("NETSUITE_CONFIG_DIR"))
+else:
+    NETSUITE_CONFIG_DIR = Path.joinpath(BASE_CONFIG_DIR, 'netsuite')
+
+if os.environ.get("NETSUITE_TOKENS_DIR") is not None:
+    NETSUITE_TOKENS_DIR = Path(os.environ.get("NETSUITE_TOKENS_DIR"))
+else:
+    NETSUITE_TOKENS_DIR = Path.joinpath(BASE_CONFIG_DIR, 'tokens')
 PACKAGE_DIR = Path(__file__).parent.resolve()
 NETSUITE_CLIENT_DIR = Path.joinpath(BASE_DIR, 'netsuite_rest_client')
 
