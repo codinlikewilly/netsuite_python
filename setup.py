@@ -5,11 +5,11 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='netsuite_python',
-    version='1.6.0',
+    version='1.6.2',
     description='Python SDK for Netsuite API with Flask Integration',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://bitbucket.org/theapiguys/netsuite_python',
+    url='https://github.com/codinlikewilly/netsuite_python',
     readme="README.md",
     author='Will @ TheAPIGuys',
     author_email='will@theapiguys.com',
