@@ -24,6 +24,7 @@ setup(
         "certifi",
         "python-dateutil",
         "pyOpenSSL",
+        "python-dotenv"
     ],
     entry_points={
         'console_scripts': [
