@@ -44,7 +44,7 @@ This library makes it easy to set up a Netsuite authorization without needing a 
 run ``` netsuite initialize ```
 * Follow the prompts
 
-* Docs will be located in the generated "netsuite_rest_client folder" at the rot of the project
+* Docs will be located in the generated "netsuite_rest_client folder" at the root of the project
 
 #### Usage ####
 ```python
