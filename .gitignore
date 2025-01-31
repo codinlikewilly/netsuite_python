@@ -53,3 +53,4 @@ build/
 /netsuite-key.pem
 /netsuite_python.egg-info/
 backup/
+/venv/
