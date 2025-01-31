@@ -93,7 +93,7 @@ class Netsuite:
 
         headers = {
             "typ": "JWT",
-            "alg": "RS256",
+            "alg": "PS256",
             "kid": f"{self.netsuite_cert_id}"
         }
         jwt_token = jwt.encode(payload=payload, key=private_key, algorithm='RS256', headers=headers)
