@@ -12,7 +12,7 @@ import re  # noqa: F401
 import six
 import json
 
-from netsuite.api_clients.api_client import ApiClient
+from backup.netsuite.api_clients.api_client import ApiClient
 
 
 class QueryApi(object):

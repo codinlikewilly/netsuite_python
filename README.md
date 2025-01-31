@@ -47,13 +47,15 @@ run ``` netsuite initialize ```
 * Docs will be located in the generated "netsuite_rest_client folder" at the rot of the project
 
 #### Usage ####
+
 ```python
 # import Netsuite Package
-from netsuite import Netsuite
+from backup.netsuite import Netsuite
 # import the generated Client
 from netsuite_rest_client import apis, rest_api_client
 # import models
 from netsuite_rest_client.model.customer import Customer
+
 # instantiate the SDK
 netsuite = Netsuite()
 # Instantiate the generated Client

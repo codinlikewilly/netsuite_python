@@ -1,5 +1,4 @@
-from netsuite import Netsuite
-import netsuite_client
+from backup.netsuite import Netsuite
 from netsuite_client.api.customer_api import CustomerApi
 
 netsuite = Netsuite(config_file=settings.NS_CREDENTIALS_PATH)

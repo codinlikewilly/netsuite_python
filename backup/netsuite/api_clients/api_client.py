@@ -22,8 +22,8 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from netsuite.api_clients.configuration import Configuration
-from netsuite.api_clients import rest
+from backup.netsuite.api_clients.configuration import Configuration
+from backup.netsuite.api_clients import rest
 
 
 class ApiClient(object):

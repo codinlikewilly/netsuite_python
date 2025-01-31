@@ -52,3 +52,4 @@ build/
 /netsuite-certificate.pem
 /netsuite-key.pem
 /netsuite_python.egg-info/
+backup/
