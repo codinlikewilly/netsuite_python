@@ -22,8 +22,9 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from netsuite.api_clients.configuration import Configuration
-from netsuite.api_clients import rest
+from netsuite.swagger_client.configuration import Configuration
+import netsuite.swagger_client.models
+from netsuite.swagger_client import rest
 
 
 class ApiClient(object):

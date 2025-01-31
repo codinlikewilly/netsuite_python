@@ -107,7 +107,6 @@ class RESTClientObject(object):
     def request(self, method, url, query_params=None, headers=None,
                 body=None, post_params=None, _preload_content=True,
                 _request_timeout=None):
-
         """Perform requests.
 
         :param method: http request method
@@ -126,7 +125,6 @@ class RESTClientObject(object):
                                  timeout. It can also be a pair (tuple) of
                                  (connection, read) timeouts.
         """
-
         method = method.upper()
         assert method in ['GET', 'HEAD', 'DELETE', 'POST', 'PUT',
                           'PATCH', 'OPTIONS']
@@ -153,6 +151,7 @@ class RESTClientObject(object):
 
         if headers.get("Accept") == "application/vnd.oracle.resource+json; type=error":
             headers["Accept"] = "application/vnd.oracle.resource+json; type=singular"
+
         try:
             # For `POST`, `PUT`, `PATCH`, `OPTIONS`, `DELETE`
             if method in ['POST', 'PUT', 'PATCH', 'OPTIONS', 'DELETE']:

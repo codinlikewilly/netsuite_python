@@ -12,7 +12,8 @@ import re  # noqa: F401
 import six
 import json
 
-from netsuite.api_clients.api_client import ApiClient
+from netsuite.swagger_client.api_client import ApiClient
+import netsuite.swagger_client.models
 
 
 class QueryApi(object):
@@ -23,7 +24,7 @@ class QueryApi(object):
         self.api_client = api_client
 
     def execute_query(self, query, **kwargs):
-        all_params = ['prefer', 'response_type', 'limit', 'offset']  # noqa: E501
+        all_params = ['prefer', 'response_type', 'limit', 'offset']  # noqa: E
         params = locals()
         for key, val in six.iteritems(params['kwargs']):
             if key not in all_params:
@@ -42,7 +43,9 @@ class QueryApi(object):
             header_params['Prefer'] = 'transient'
 
         if 'limit' in params:
+            print(params['limit'])
             if params['limit'] is not None:
+                print('set')
                 query_params['limit'] = params['limit']
             else:
                 query_params['limit'] = 500
@@ -53,21 +56,20 @@ class QueryApi(object):
             else:
                 query_params['offset'] = 0
 
-
-        # if 'response_type' in params:
-        #     if params['response_type'] is not None:
-        #         if hasattr(netsuite.swagger_client.models, params['response_type']):
-        #             response_type = params['response_type']
-        #         else:
-        #             response_type = None
-        #             raise TypeError(f"{params['response_type']} is not a valid response type")
-        #     return_http_only_data = True
-        #     _preload_content = True
-        #     # print(params['response_type'])
-        # else:
-        response_type = None
-        return_http_only_data = True
-        _preload_content = False
+        if 'response_type' in params:
+            if params['response_type'] is not None:
+                if hasattr(netsuite.swagger_client.models, params['response_type']):
+                    response_type = params['response_type']
+                else:
+                    response_type = None
+                    raise TypeError(f"{params['response_type']} is not a valid response type")
+            return_http_only_data = True
+            _preload_content = True
+            # print(params['response_type'])
+        else:
+            response_type = None
+            return_http_only_data = True
+            _preload_content = False
 
         # Authentication setting
         auth_settings = ['oAuth2ClientCredentials']

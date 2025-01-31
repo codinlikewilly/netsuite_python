@@ -5,12 +5,11 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='netsuite_python',
-    version='1.6.0',
+    version='2.0.0',
     description='Python SDK for Netsuite API with Flask Integration',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://bitbucket.org/theapiguys/netsuite_python',
-    readme="README.md",
+    url='https://github.com/codinlikewilly/netsuite_python',
     author='Will @ TheAPIGuys',
     author_email='will@theapiguys.com',
     packages=find_packages(),
@@ -19,11 +18,11 @@ setup(
         'Click',
         'requests',
         'PyJWT',
-        "urllib3 >= 1.25.3",
+        "urllib3 >= 1.15",
         "six >= 1.10",
         "certifi",
         "python-dateutil",
-        "pyOpenSSL",
+        "pyOpenSSL"
     ],
     entry_points={
         'console_scripts': [

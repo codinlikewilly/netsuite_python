@@ -1,14 +1,3 @@
-Metadata-Version: 2.1
-Name: netsuite-python
-Version: 1.6.4
-Summary: Python SDK for Netsuite API with Flask Integration
-Home-page: https://github.com/codinlikewilly/netsuite_python
-Author: Will @ TheAPIGuys
-Author-email: will@theapiguys.com
-License: UNKNOWN
-Platform: UNKNOWN
-Description-Content-Type: text/markdown
-
 # README #
 
 
@@ -150,8 +139,6 @@ re-run ```netsuite generate-rest-client```
         * Path to Netsuite Credentials
     * Confirm the app name to be refreshed, if single app, just use default
 * That's it! You should now have a valid token to use with the Netsuite API.
-
-
 
 
 
