@@ -6,8 +6,15 @@ from click import prompt
 
 from netsuite.Netsuite import Netsuite
 from netsuite.settings import api_settings, IN_MEMORY_STORAGE, JSON_STORAGE
-from OpenSSL.SSL import FILETYPE_PEM
-from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
+import click
+from cryptography import x509
+from cryptography.x509.oid import NameOID
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from datetime import datetime, timedelta
+# from OpenSSL.SSL import FILETYPE_PEM
+# from OpenSSL.crypto import (dump_certificate, X509, X509Name, PKey, TYPE_RSA, X509Req, dump_privatekey, X509Extension)
 
 
 @click.group()
@@ -18,48 +25,105 @@ def cli():
     pass
 
 
+# @cli.command()
+# def generate_certificate():
+#     CN = prompt("Domain", hide_input=False)
+#     ORG = prompt("Organization", hide_input=False)
+#     ORG_UNIT = prompt("Department", hide_input=False)
+#     L = prompt("City", hide_input=False)
+#     ST = prompt("State", hide_input=False)
+#     C = prompt("Country", hide_input=False)
+#     EMAIL = prompt("Email", hide_input=False)
+#
+#     NETSUITE_KEY_FILE = prompt("Netsuite Key FIle Name['./netsuite-key']: ", default=api_settings.NETSUITE_KEY_FILE)
+#     CERTIFICATE_FILE = './netsuite-certificate.pem'
+#
+#     key = PKey()
+#     key.generate_key(TYPE_RSA, 4096)
+#
+#     cert = X509()
+#
+#     subject = cert.get_subject()
+#     subject.CN = CN
+#     subject.O = ORG
+#     subject.OU = ORG_UNIT
+#     subject.L = L
+#     subject.ST = ST
+#     subject.C = C
+#     subject.emailAddress = EMAIL
+#
+#     cert.set_version(2)
+#     cert.set_issuer(subject)
+#     cert.set_subject(subject)
+#     cert.set_serial_number(int.from_bytes(os.urandom(16), byteorder="big"))
+#     # cert.set_serial_number(int(rand.bytes(16).encode('hex'), 16))
+#     cert.gmtime_adj_notBefore(0)
+#     cert.gmtime_adj_notAfter(31536000)
+#     cert.set_pubkey(key)
+#     cert.sign(key, 'sha256')
+#
+#     with open(CERTIFICATE_FILE, 'wb+') as f:
+#         f.write(dump_certificate(FILETYPE_PEM, cert))
+#     with open(NETSUITE_KEY_FILE, 'wb+') as f:
+#         f.write(dump_privatekey(FILETYPE_PEM, key))
 @cli.command()
 def generate_certificate():
-    CN = prompt("Domain", hide_input=False)
-    ORG = prompt("Organization", hide_input=False)
-    ORG_UNIT = prompt("Department", hide_input=False)
-    L = prompt("City", hide_input=False)
-    ST = prompt("State", hide_input=False)
-    C = prompt("Country", hide_input=False)
-    EMAIL = prompt("Email", hide_input=False)
+    # Prompt for certificate attributes
+    CN = click.prompt("Domain", hide_input=False)
+    ORG = click.prompt("Organization", hide_input=False)
+    ORG_UNIT = click.prompt("Department", hide_input=False)
+    L = click.prompt("City", hide_input=False)
+    ST = click.prompt("State", hide_input=False)
+    C = click.prompt("Country", hide_input=False)
+    EMAIL = click.prompt("Email", hide_input=False)
 
-    NETSUITE_KEY_FILE = prompt("Netsuite Key FIle Name['./netsuite-key']: ", default=api_settings.NETSUITE_KEY_FILE)
-    CERTIFICATE_FILE = './netsuite-certificate.pem'
+    # Generate private key
+    private_key = rsa.generate_private_key(
+        public_exponent=65537,
+        key_size=4096,
+    )
 
-    key = PKey()
-    key.generate_key(TYPE_RSA, 4096)
+    # Generate self-signed certificate using the prompted attributes
+    subject = issuer = x509.Name([
+        x509.NameAttribute(NameOID.COUNTRY_NAME, C),
+        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, ST),
+        x509.NameAttribute(NameOID.LOCALITY_NAME, L),
+        x509.NameAttribute(NameOID.ORGANIZATION_NAME, ORG),
+        x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, ORG_UNIT),
+        x509.NameAttribute(NameOID.COMMON_NAME, CN),
+        x509.NameAttribute(NameOID.EMAIL_ADDRESS, EMAIL),
+    ])
+    cert = x509.CertificateBuilder().subject_name(
+        subject
+    ).issuer_name(
+        issuer
+    ).public_key(
+        private_key.public_key()
+    ).serial_number(
+        x509.random_serial_number()
+    ).not_valid_before(
+        datetime.utcnow()
+    ).not_valid_after(
+        datetime.utcnow() + timedelta(days=730)
+    ).add_extension(
+        x509.SubjectAlternativeName([x509.DNSName(CN)]),
+        critical=False,
+    ).sign(private_key, hashes.SHA256())
 
-    cert = X509()
+    NETSUITE_PRIVATE_KEY_FILE = prompt("Netsuite Key File Name['./netsuite_key']: ", default=api_settings.NETSUITE_KEY_FILE)
+    CERTIFICATE_FILE = './netsuite_certificate.pem'
 
-    subject = cert.get_subject()
-    subject.CN = CN
-    subject.O = ORG
-    subject.OU = ORG_UNIT
-    subject.L = L
-    subject.ST = ST
-    subject.C = C
-    subject.emailAddress = EMAIL
+    # Write private key to file
+    with open(NETSUITE_PRIVATE_KEY_FILE, "wb") as f:
+        f.write(private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption()
+        ))
 
-    cert.set_version(2)
-    cert.set_issuer(subject)
-    cert.set_subject(subject)
-    cert.set_serial_number(int.from_bytes(os.urandom(16), byteorder="big"))
-    # cert.set_serial_number(int(rand.bytes(16).encode('hex'), 16))
-    cert.gmtime_adj_notBefore(0)
-    cert.gmtime_adj_notAfter(31536000)
-    cert.set_pubkey(key)
-    cert.sign(key, 'sha256')
-
-    with open(CERTIFICATE_FILE, 'wb+') as f:
-        f.write(dump_certificate(FILETYPE_PEM, cert))
-    with open(NETSUITE_KEY_FILE, 'wb+') as f:
-        f.write(dump_privatekey(FILETYPE_PEM, key))
-
+    # Write certificate to file
+    with open(CERTIFICATE_FILE, "wb") as f:
+        f.write(cert.public_bytes(serialization.Encoding.PEM))
 
 @cli.command()
 def generate_client_config():
