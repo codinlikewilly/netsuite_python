@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import requests
 from netsuite.NetsuiteToken import NetsuiteToken
-from netsuite.swagger_client.rest_client import RestClient, QueryClient
+from netsuite.swagger_client.rest_client import RestClient, QueryClient, RestletClient
 from netsuite.settings import APISettings
 from netsuite.storages import BaseStorage, JSONStorage
 from netsuite import api_clients
@@ -77,7 +77,7 @@ class Netsuite:
     @property
     def RESTLET_CLIENT(self):
         if not self.restlet_client:
-            self.restlet_client = self.RestletClient(self)
+            self.restlet_client = RestletClient(self)
         return self.restlet_client
 
     @property
@@ -234,24 +234,24 @@ class Netsuite:
               '\nrest_client = rest_api_client.RestApiClient(netsuite)'
               '\ncustomer_api = apis.CustomerApi(rest_client)')
 
-    class RestletClient:
-        def __init__(self, netsuite):
-            self.netsuite = netsuite
-            self.configuration = api_clients.Configuration()
-            self.configuration.token = netsuite.storage.get_token(netsuite.app_name)
-            self.configuration.token_refresh_hook = self.refresh_token
-            self.configuration.app_name = netsuite.netsuite_app_name
-            self.configuration.host = f"https://{self.configuration.app_name}.restlets.api.netsuite.com/app/site/hosting/restlet.nl"
-            self.api_client = api_clients.ApiClient(configuration=self.configuration)
-            self.restlet_api = api_clients.RestletApi(api_client=self.api_client)
-
-            # self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
-            # self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
-            # self.message_api = swagger_client.MessageApi(api_client=self.api_client)
-
-        def refresh_token(self):
-            self.configuration.token = self.netsuite.get_token()
-            return self.configuration.token
+    # class RestletClient:
+    #     def __init__(self, netsuite):
+    #         self.netsuite = netsuite
+    #         self.configuration = api_clients.Configuration()
+    #         self.configuration.token = netsuite.storage.get_token(netsuite.app_name)
+    #         self.configuration.token_refresh_hook = self.refresh_token
+    #         self.configuration.app_name = netsuite.netsuite_app_name
+    #         self.configuration.host = f"https://{self.configuration.app_name}.restlets.api.netsuite.com/app/site/hosting/restlet.nl"
+    #         self.api_client = api_clients.ApiClient(configuration=self.configuration)
+    #         self.restlet_api = api_clients.RestletApi(api_client=self.api_client)
+    #
+    #         # self.contact_api = swagger_client.ContactApi(api_client=self.api_client)
+    #         # self.customer_api = swagger_client.CustomerApi(api_client=self.api_client)
+    #         # self.message_api = swagger_client.MessageApi(api_client=self.api_client)
+    #
+    #     def refresh_token(self):
+    #         self.configuration.token = self.netsuite.get_token()
+    #         return self.configuration.token
 
     # def get_status_dict(self):
     #     if self.token.access_token is None:

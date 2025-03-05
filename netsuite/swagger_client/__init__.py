@@ -19,6 +19,7 @@ from netsuite.swagger_client.api.contact_api import ContactApi
 from netsuite.swagger_client.api.customer_api import CustomerApi
 from netsuite.swagger_client.api.query_api import QueryApi
 from netsuite.swagger_client.api.message_api import MessageApi
+from netsuite.swagger_client.api.restlet_api import RestletApi
 # import ApiClient
 from netsuite.swagger_client.api_client import ApiClient
 from netsuite.swagger_client.configuration import Configuration
