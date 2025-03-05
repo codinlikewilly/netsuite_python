@@ -17,6 +17,7 @@ class Netsuite:
     api_settings: APISettings
     rest_client = None
     query_client = None
+    restlet_client = None
 
     def __init__(self, config: dict = None, config_file: Path = None):
         if config and config_file:
@@ -72,6 +73,12 @@ class Netsuite:
                 # self.get_customer_categories()
                 # self.get_status_dict()
         return self.query_client
+
+    @property
+    def RESTLET_CLIENT(self):
+        if not self.restlet_client:
+            self.restlet_client = self.RestletClient(self)
+        return self.restlet_client
 
     @property
     def token(self) -> NetsuiteToken:
