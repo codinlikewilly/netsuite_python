@@ -93,7 +93,7 @@ class Netsuite:
             private_key = pemfile.read()
         payload = {
             "iss": f"{self.api_settings.CLIENT_ID}",
-            "scope": "rest_webservices",
+            "scope": "restlets, rest_webservices",
             "aud": f"{self.access_token_url}",
             "exp": (datetime.now() + timedelta(seconds=3600)).timestamp(),
             "iat": datetime.now().timestamp()
