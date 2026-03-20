@@ -57,7 +57,7 @@ class Netsuite:
             self.storage.storage_path = self.api_settings.JSON_STORAGE_PATH
         self.rest_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest" \
                         f"/record/v1/ "
-        self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token",
+        self.access_token_url = f"https://{self.api_settings.NETSUITE_APP_NAME}.suitetalk.api.netsuite.com/services/rest/auth/oauth2/v1/token"
 
     @property
     def REST_CLIENT(self):
